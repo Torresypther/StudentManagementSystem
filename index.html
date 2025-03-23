@@ -45,7 +45,7 @@
                 <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Gender</th>
-                <th scope="col">Course</th>
+                <th scope="col">Degree</th>
                 <th scope="col">Address</th>
                 <th scope="col">Age</th>
                 <th scope="col">Profile</th>
@@ -198,7 +198,6 @@
     ></script>
     <script>
       $(document).ready(function () {
-        // Clear form fields when the modal is hidden
         $("#addModal").on("hidden.bs.modal", function () {
           $("#addStudentForm")[0].reset();
         });
