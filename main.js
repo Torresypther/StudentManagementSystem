@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $.ajax({
-    url: "student_data.php",
+    url: "std_data.php",
     type: "GET",
     dataType: "json",
   })
@@ -21,7 +21,7 @@ $(document).ready(function () {
         }
 
         let clone = template.content.cloneNode(true);
-        clone.querySelector(".stud_ID").innerHTML = item.student_id;
+        clone.querySelector(".id").innerHTML = item.student_id;
         clone.querySelector(".fname").innerHTML = item.first_name || "N/A";
         clone.querySelector(".lname").innerHTML = item.last_name || "N/A";
         clone.querySelector(".email").innerHTML = item.email || "N/A";
@@ -86,6 +86,44 @@ $(document).ready(function () {
         console.error("AJAX error: ", textStatus, errorThrown);
       });
   });
+});
+function loginUser() {
+  $("#loginForm").submit(function (event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Serialize form data
+    let formData = {
+      email: $("#email").val(),
+      password: $("#password").val(), // Plain text password
+    };
+
+    // Send the data to login.php via AJAX
+    $.ajax({
+      url: "login.php", // The PHP file to handle login
+      type: "POST",
+      dataType: "json",
+      data: formData, // Pass serialized form data
+    })
+      .done(function (response) {
+        console.log(response); // Log the response for debugging
+
+        if (response.res === "success") {
+          // Redirect to the dashboard or another page on successful login
+          window.location.href = "index.html";
+        } else {
+          // Show an error message if login fails
+          alert("Login failed: " + response.msg);
+        }
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        console.error("AJAX error: ", textStatus, errorThrown);
+        alert("An error occurred while processing your request.");
+      });
+  });
+}
+
+$(document).ready(function () {
+  loginUser();
 });
 
 // function deleteStudent(studentID) {

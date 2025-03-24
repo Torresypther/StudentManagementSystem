@@ -1,121 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register Student</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
     <link rel="stylesheet" href="index.css" />
     <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"
-  ></script>
-</head>
-<body>
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Registration Form</h1>
-        <form id="registerUser" enctype="multipart/form-data">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="fname">First Name:</label>
-                        <input type="text" class="form-control" id="fname" name="fname"/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="lname">Last Name:</label>
-                        <input type="text" class="form-control" id="lname" name="lname" />
-                    </div>
-                </div>
+      <h1 class="mb-4">Registration Form</h1>
+      <form id="registerUser" enctype="multipart/form-data">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="fname">First Name:</label>
+              <input type="text" class="form-control" id="fname" name="fname" />
             </div>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" required/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" class="form-control" id="password" name="password"/>
-                    </div>
-                </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="lname">Last Name:</label>
+              <input type="text" class="form-control" id="lname" name="lname" />
             </div>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="address">Address:</label>
-                        <input type="text" class="form-control" id="address" name="address"/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="gender">Gender:</label>
-                        <select class="form-control" id="gender" name="gender">
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                required
+              />
             </div>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="course">Course:</label>
-                        <input type="text" class="form-control" id="course" name="course"/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="phoneNUmber">Phone Number:</label>
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" />
-                    </div>
-                </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+              />
             </div>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="birthday">Birthday:</label>
-                        <input type="date" class="form-control" id="birthdate" name="birthdate" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="profile">Profile:</label>
-                        <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*"/>
-                    </div>
-                </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="address">Address:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="address"
+                name="address"
+              />
             </div>
-            <div class="d-flex justify-content-end">
-                <button type="reset" class="btn btn-secondary me-2">Reset</button>
-                <button id="btnSaveUser" type="submit" class="btn btn-primary">Add User</button>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="gender">Gender:</label>
+              <select class="form-control" id="gender" name="gender">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
-        </form>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="course">Course:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="course"
+                name="course"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="phoneNUmber">Phone Number:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phoneNumber"
+                name="phoneNumber"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="birthday">Birthday:</label>
+              <input
+                type="date"
+                class="form-control"
+                id="birthdate"
+                name="birthdate"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="profile">Profile:</label>
+              <input
+                type="file"
+                class="form-control"
+                id="profileImage"
+                name="profileImage"
+                accept="image/*"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="reset" class="btn btn-secondary me-2">Reset</button>
+          <button id="btnSaveUser" type="submit" class="btn btn-primary">
+            Add User
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Add this modal at the end of the body -->
+    <div
+      class="modal fade"
+      id="verificationModal"
+      tabindex="-1"
+      aria-labelledby="verificationModalLabel"
+      aria-hidden="true"
+    >
+      <div id="modal-verify" class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="verificationModalLabel">
+              Verification Ongoing
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Your registration is successful. Please check your email for
+            verification instructions.
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
-    integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  ></script>
-  <script
-    src="https://code.jquery.com/jquery-3.7.1.js"
-    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-    crossorigin="anonymous"
-  ></script>
-  <script>
-    $(document).ready(function () {
-      $("#addModal").on("hidden.bs.modal", function () {
-        $("#addStudentForm")[0].reset();
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+      integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("registerUser");
+        const verificationModal = new bootstrap.Modal(
+          document.getElementById("verificationModal")
+        );
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          // Simulate form submission (e.g., via AJAX)
+          setTimeout(() => {
+            // Show the verification modal
+            verificationModal.show();
+
+            // Clear the form fields
+            form.reset();
+          }, 500); // Simulate a delay for form submission
+        });
       });
-    });
-  </script>
-  <script src="main.js"></script>
-</body>
+    </script>
+    <script src="main.js"></script>
+  </body>
 </html>

@@ -54,3 +54,49 @@ body {
     background-color: #00251a;
     border-color: #00251a;
   }
+
+  #modal-verify .modal-content {
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    border: none; /* Remove default border */
+}
+
+#modal-verify .modal-header {
+    background-color: #4caf50; /* Green header background */
+    color: #ffffff; /* White text for the header */
+    border-top-left-radius: 10px; /* Rounded corners for the top */
+    border-top-right-radius: 10px;
+    padding: 15px; /* Add padding for better spacing */
+}
+
+#modal-verify .modal-title {
+    font-size: 18px; /* Slightly larger font size */
+    font-weight: 600; /* Bold title */
+    margin: 0;
+}
+
+#modal-verify .modal-body {
+    padding: 20px; /* Add padding for better spacing */
+    font-size: 16px; /* Slightly larger text */
+    color: #555555; /* Softer text color */
+    text-align: center; /* Center-align the text */
+}
+
+#modal-verify .modal-footer {
+    border-top: none; /* Remove the default border */
+    padding: 15px; /* Add padding for better spacing */
+    justify-content: center; /* Center-align the buttons */
+}
+
+#modal-verify .btn-secondary {
+    background-color: #f0f0f0; /* Light gray button background */
+    color: #333333; /* Darker text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Add padding for better button size */
+    border-radius: 5px; /* Rounded button corners */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+#modal-verify .btn-secondary:hover {
+    background-color: #e0e0e0; /* Slightly darker gray on hover */
+}
