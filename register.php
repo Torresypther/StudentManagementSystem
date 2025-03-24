@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $address = $_POST['address'];
     $gender = $_POST['gender'];
     $course = $_POST['course'];
-    $phone_number = $_POST['phone_number'];
+    $phone_number = $_POST['phoneNumber'];
     $birthdate = $_POST['birthdate'];
     $verification_code = bin2hex(random_bytes(16));
     $profileImagePath = null;
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insert user into the database
-    $stmt = $conn->prepare("INSERT INTO user_table (first_name, last_name, email, password, address, gender, course, phone_number, birthdate, user_profile, verification_code, is_verified) VALUES (:fname, :lname, :email, :password, :address, :gender, :course, :phone_number, :birthdate, :user_profile, :verification_code)");
+    $stmt = $conn->prepare("INSERT INTO user_table (first_name, last_name, email, password, address, gender, course, phone_number, birthdate, user_profile, verification_code) VALUES (:fname, :lname, :email, :password, :address, :gender, :course, :phone_number, :birthdate, :user_profile, :verification_code)");
 
     $stmt->bindParam(':fname', $fname);
     $stmt->bindParam(':lname', $lname);
@@ -58,22 +58,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
             $mail->SMTPAuth = true;
-            $mail->Username = 'cosepcarljoshua@gmail.com'; // SMTP username
-            $mail->Password = 'iwqk rfng wrmn bftq'; // SMTP password
+            $mail->Username = 'torresypther@gmail.com'; // SMTP username
+            $mail->Password = 'tbdn nfdr mqhh vguq'; // SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
             //Recipients
-            $mail->setFrom('cosepcarljoshua@gmail.com', 'Mailer');
+            $mail->setFrom('torresypther@gmail.com', 'Mailer');
             $mail->addAddress($email); // Add a recipient
 
             // Content
             $mail->isHTML(true);
             $mail->Subject = 'Account Verification';
-            $mail->Body    = 'Click the link to verify your account: <a href="http://localhost/prelim_crud/verify.php?code=' . $verification_code . '">Verify Account</a>';
+            $mail->Body = 'Click the link to verify your account: <a href="http://localhost/StudentManagementSystem/verify.php?code=' . $verification_code . '">Verify Account</a>';
 
             $mail->send();
             echo 'Registration successful! Please check your email to verify your account.';
+            header('Content-Type: application/json');
+            echo json_encode(["res" => "success", "msg" => "Registration successful!"]);
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
@@ -81,4 +83,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Error: Could not register user.";
     }
 }
-?>

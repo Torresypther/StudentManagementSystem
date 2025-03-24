@@ -59,14 +59,14 @@ $(document).ready(function () {
       console.error("Error fetching student data: ", textStatus, errorThrown);
     });
 
-  $("#addStudentForm").submit(function (event) {
+  $("#registerUser").submit(function (event) {
     event.preventDefault();
 
     let formData = new FormData(this);
     console.log("Submitting form:", formData);
 
     $.ajax({
-      url: "std_create.php",
+      url: "register.php",
       type: "POST",
       dataType: "json",
       data: formData,
@@ -76,10 +76,10 @@ $(document).ready(function () {
       .done(function (result) {
         console.log(result);
         if (result.res === "success") {
-          alert("Student added successfully");
-          location.reload();
+          alert("Verification Request Sent");
+          window.location.reload();
         } else {
-          alert("Failed to add student: " + result.msg);
+          alert("Failed to Request Verification: " + result.msg);
         }
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
@@ -88,75 +88,75 @@ $(document).ready(function () {
   });
 });
 
-function deleteStudent(studentID) {
-  $.ajax({
-    url: "std_delete.php",
-    type: "POST",
-    dataType: "json",
-    data: {
-      student_id: Number(studentID),
-    },
-  })
-    .done(function (result) {
-      console.log(result);
-      if (result.res === "success") {
-        alert("Student deleted successfully");
-        window.location.reload();
-      } else {
-        alert("Failed to delete student");
-      }
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-      console.error("Delete request failed: ", textStatus, errorThrown);
-    });
-}
+// function deleteStudent(studentID) {
+//   $.ajax({
+//     url: "std_delete.php",
+//     type: "POST",
+//     dataType: "json",
+//     data: {
+//       student_id: Number(studentID),
+//     },
+//   })
+//     .done(function (result) {
+//       console.log(result);
+//       if (result.res === "success") {
+//         alert("Student deleted successfully");
+//         window.location.reload();
+//       } else {
+//         alert("Failed to delete student");
+//       }
+//     })
+//     .fail(function (jqXHR, textStatus, errorThrown) {
+//       console.error("Delete request failed: ", textStatus, errorThrown);
+//     });
+// }
 
-function showUpdateModal(item) {
-  $("#fname").val(item.first_name);
-  $("#lname").val(item.last_name);
-  $("#email").val(item.email);
-  $("#gender").val(item.gender);
-  $("#course").val(item.course);
-  $("#address").val(item.address);
-  $("#birthday").val(item.birthdate);
-  $("#profileImage").val("");
+// function showUpdateModal(item) {
+//   $("#fname").val(item.first_name);
+//   $("#lname").val(item.last_name);
+//   $("#email").val(item.email);
+//   $("#gender").val(item.gender);
+//   $("#course").val(item.course);
+//   $("#address").val(item.address);
+//   $("#birthday").val(item.birthdate);
+//   $("#profileImage").val("");
 
-  let profileSrc =
-    item.profile && item.profile.trim() !== ""
-      ? item.profile
-      : "profiles/default.jpg";
-  $("#profilePreview").attr("src", profileSrc);
+//   let profileSrc =
+//     item.profile && item.profile.trim() !== ""
+//       ? item.profile
+//       : "profiles/default.jpg";
+//   $("#profilePreview").attr("src", profileSrc);
 
-  $("#addModal").modal("show");
+//   $("#addModal").modal("show");
 
-  $("#addStudentForm")
-    .off("submit")
-    .one("submit", function (event) {
-      event.preventDefault();
+//   $("#addStudentForm")
+//     .off("submit")
+//     .one("submit", function (event) {
+//       event.preventDefault();
 
-      let formData = new FormData(this);
-      formData.append("student_id", item.student_id);
-      console.log("Updating student:", formData);
+//       let formData = new FormData(this);
+//       formData.append("student_id", item.student_id);
+//       console.log("Updating student:", formData);
 
-      $.ajax({
-        url: "std_update.php",
-        type: "POST",
-        dataType: "json",
-        data: formData,
-        processData: false,
-        contentType: false,
-      })
-        .done(function (result) {
-          console.log(result);
-          if (result.res === "success") {
-            alert("Student updated successfully");
-            window.location.reload();
-          } else {
-            alert("Failed to update student: " + result.msg);
-          }
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-          console.error("Update request failed: ", textStatus, errorThrown);
-        });
-    });
-}
+//       $.ajax({
+//         url: "std_update.php",
+//         type: "POST",
+//         dataType: "json",
+//         data: formData,
+//         processData: false,
+//         contentType: false,
+//       })
+//         .done(function (result) {
+//           console.log(result);
+//           if (result.res === "success") {
+//             alert("Student updated successfully");
+//             window.location.reload();
+//           } else {
+//             alert("Failed to update student: " + result.msg);
+//           }
+//         })
+//         .fail(function (jqXHR, textStatus, errorThrown) {
+//           console.error("Update request failed: ", textStatus, errorThrown);
+//         });
+//     });
+// }
