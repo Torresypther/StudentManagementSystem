@@ -197,9 +197,23 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      $(document).ready(function () {
-        $("#addModal").on("hidden.bs.modal", function () {
-          $("#addStudentForm")[0].reset();
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("registerUser");
+        const verificationModal = new bootstrap.Modal(
+          document.getElementById("verificationModal")
+        );
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          // Simulate form submission (e.g., via AJAX)
+          setTimeout(() => {
+            // Show the verification modal
+            verificationModal.show();
+
+            // Clear the form fields
+            form.reset();
+          }, 500); // Simulate a delay for form submission
         });
       });
     </script>

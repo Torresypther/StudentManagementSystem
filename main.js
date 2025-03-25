@@ -87,31 +87,58 @@ $(document).ready(function () {
       });
   });
 });
-function loginUser() {
-  $("#loginForm").submit(function (event) {
-    event.preventDefault(); // Prevent the default form submission
 
-    // Serialize form data
-    let formData = {
-      email: $("#email").val(),
-      password: $("#password").val(), // Plain text password
-    };
+function addStudent() {
+  $("#addStudentForm").submit(function (event) {
+    event.preventDefault(); // Prevent default form submission
 
-    // Send the data to login.php via AJAX
+    let formData = new FormData(this); // Collect form data
+    console.log("Submitting form:", formData);
+
     $.ajax({
-      url: "login.php", // The PHP file to handle login
+      url: "std_create.php", // Endpoint for adding a student
       type: "POST",
       dataType: "json",
-      data: formData, // Pass serialized form data
+      data: formData,
+      processData: false, // Prevent jQuery from processing the data
+      contentType: false, // Prevent jQuery from setting the content type
+    })
+      .done(function (result) {
+        console.log(result);
+        if (result.res === "success") {
+          alert("Student added successfully");
+          window.location.reload();
+        } else {
+          alert("Failed to add student: " + result.msg);
+        }
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        console.error("AJAX error: ", textStatus, errorThrown);
+      });
+  });
+}
+
+function loginUser() {
+  $("#loginForm").submit(function (event) {
+    event.preventDefault();
+
+    let formData = {
+      email: $("#email").val(),
+      password: $("#password").val(),
+    };
+
+    $.ajax({
+      url: "login.php",
+      type: "POST",
+      dataType: "json",
+      data: formData,
     })
       .done(function (response) {
-        console.log(response); // Log the response for debugging
+        console.log(response);
 
         if (response.res === "success") {
-          // Redirect to the dashboard or another page on successful login
-          window.location.href = "index.html";
+          window.location.href = "dashboard.html";
         } else {
-          // Show an error message if login fails
           alert("Login failed: " + response.msg);
         }
       })
