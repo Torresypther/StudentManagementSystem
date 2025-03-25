@@ -1,6 +1,6 @@
 <?php
-require 'vendor/autoload.php'; // Load PHPMailer
-require 'db_conn.php'; // Include your database connection file
+require 'vendor/autoload.php';
+require 'db_conn.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -35,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // Insert user into the database
     $stmt = $conn->prepare("INSERT INTO user_table (first_name, last_name, email, password, address, gender, course, phone_number, birthdate, user_profile, verification_code) VALUES (:fname, :lname, :email, :password, :address, :gender, :course, :phone_number, :birthdate, :user_profile, :verification_code)");
 
     $stmt->bindParam(':fname', $fname);
@@ -51,23 +50,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bindParam(':verification_code', $verification_code);
 
     if ($stmt->execute()) {
-        // Send verification email
         $mail = new PHPMailer(true);
         try {
-            //Server settings
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
+            $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'torresypther@gmail.com'; // SMTP username
-            $mail->Password = 'tbdn nfdr mqhh vguq'; // SMTP password
+            $mail->Username = 'torresypther@gmail.com';
+            $mail->Password = 'tbdn nfdr mqhh vguq';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
-            //Recipients
             $mail->setFrom('torresypther@gmail.com', 'Mailer');
-            $mail->addAddress($email); // Add a recipient
+            $mail->addAddress($email);
 
-            // Content
             $mail->isHTML(true);
             $mail->Subject = 'Account Verification';
             $mail->Body = 'Click the link to verify your account: <a href="http://localhost/StudentManagementSystem/verify.php?code=' . $verification_code . '">Verify Account</a>';
