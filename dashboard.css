@@ -1,3 +1,4 @@
+/* General Styling */
 body {
     font-family: "Roboto", sans-serif;
     margin: 0;
@@ -5,25 +6,23 @@ body {
     display: flex;
     height: 100vh;
     background-color: #f9fafb;
-}
-
-.sidebar {
+  }
+  
+  .sidebar {
     width: 250px;
     background-color: #1e293b;
     color: #fff;
     display: flex;
     flex-direction: column;
     padding: 20px;
-}
-
-.sidebar h2 {
+  }
+  
+  .sidebar h2 {
     text-align: center;
     margin-bottom: 20px;
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.sidebar a {
+  }
+  
+  .sidebar a {
     color: #cbd5e1;
     text-decoration: none;
     padding: 10px 15px;
@@ -31,65 +30,96 @@ body {
     border-radius: 5px;
     display: block;
     font-size: 16px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.sidebar a:hover {
+  }
+  
+  .sidebar a:hover {
     background-color: #334155;
     color: #fff;
-}
-
-.main-content {
+  }
+  
+  .main-content {
     flex: 1;
     padding: 30px;
     background-color: #f9fafb;
-}
-
+  }
+  
+  /* Dashboard Header */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    color: #1e293b;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  .dashboard-header .date-time {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1e293b;
+  }
+  /* Summary Boxes */
 .summary-boxes {
     display: flex;
-    gap: 20px;
+    gap: 20px; /* Space between boxes */
     margin-bottom: 30px;
+    flex-wrap: nowrap; /* Prevent wrapping to the next row */
+    justify-content: space-between; /* Distribute boxes evenly */
 }
 
 .summary-box {
-    flex: 1;
-    padding: 30px;
+    flex-basis: 30%; /* Each box takes 30% of the row width */
+    max-width: 300px; /* Optional: Limit the maximum width */
+    background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
     position: relative;
-    height: 150px;
+    height: 120px;
 }
 
 .summary-box h4 {
-    position: absolute;
-    top: 10px;
-    left: 15px;
-    margin: 0;
     font-size: 16px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.8);
+    color: #1e293b;
+    margin-bottom: 10px;
 }
 
 .summary-box .value {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
     font-size: 28px;
     font-weight: 700;
-    color: #fff;
+    color: #1e293b;
 }
 
-.summary-box:nth-child(1) {
-    background-color: #2563eb;
+.summary-box .icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #6b7280;
 }
 
-.summary-box:nth-child(2) {
-    background-color: #16a34a;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .summary-boxes {
+        flex-direction: column; /* Stack boxes vertically */
+        gap: 15px; /* Reduce gap between boxes */
+    }
 
-.summary-box:nth-child(3) {
-    background-color: #f59e0b;
+    .summary-box {
+        flex-basis: 100%; /* Each box takes full width */
+        max-width: 100%; /* Remove maximum width */
+    }
 }
 
 .table-container {
@@ -155,4 +185,28 @@ body {
 
 .btn-danger:hover {
     background-color: #dc2626;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff; /* White background */
+    color: #1e293b; /* Sidebar color for text */
+    padding: 20px 30px; /* Padding for spacing */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-bottom: 20px; /* Space below the header */
+}
+
+.dashboard-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.dashboard-header .date-time {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1e293b; /* Sidebar color for text */
 }
