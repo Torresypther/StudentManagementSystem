@@ -1,65 +1,32 @@
 <?php
-
-require 'db_conn.php';
+session_start(); // Start the session
+require 'db_conn.php'; // Include your database connection
 
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    if (empty($email) || empty($password)) {
-        echo json_encode([
-            'res' => 'error',
-            'msg' => 'Email and password are required.'
-        ]);
-        exit;
-    }
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
     try {
-        $email = strtolower($email);
-
-        error_log("Received Email: $email");
-        error_log("Received Password: $password");
-
-        $stmt = $conn->prepare("SELECT * FROM user_table WHERE LOWER(email) = :email");
-        $stmt->bindParam(':email', $email);
+        // Query to check if the user exists
+        $stmt = $conn->prepare("SELECT user_id, password FROM user_table WHERE email = :email");
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
-
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        error_log("Fetched User: " . print_r($user, true));
+        if ($user && password_verify($password, $user['password'])) {
+            // Store user_id in session
+            $_SESSION['user_id'] = $user['user_id'];
 
-        if ($user) {
-            if (password_verify($password, $user['password'])) {
-                echo json_encode([
-                    'res' => 'success',
-                    'msg' => 'Login successful'
-                ]);
-            } else {
-                error_log("Password verification failed for email: $email");
-                echo json_encode([
-                    'res' => 'error',
-                    'msg' => 'Invalid password.'
-                ]);
-            }
+            echo json_encode(['res' => 'success', 'msg' => 'Login successful']);
         } else {
-            error_log("Email not found: $email");
-            echo json_encode([
-                'res' => 'error',
-                'msg' => 'Email not found.'
-            ]);
+            echo json_encode(['res' => 'error', 'msg' => 'Invalid email or password']);
         }
     } catch (PDOException $e) {
-        error_log("Database Error: " . $e->getMessage());
-        echo json_encode([
-            'res' => 'error',
-            'msg' => 'Database error: ' . $e->getMessage()
-        ]);
+        echo json_encode(['res' => 'error', 'msg' => $e->getMessage()]);
     }
 } else {
-    echo json_encode([
-        'res' => 'error',
-        'msg' => 'Invalid request method.'
-    ]);
+    echo json_encode(['res' => 'error', 'msg' => 'Invalid request method']);
 }
+?>

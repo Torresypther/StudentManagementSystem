@@ -9,7 +9,7 @@ if (isset($_GET['code'])) {
 
     if ($stmt->execute() && $stmt->rowCount() > 0) {
         echo "Your account has been verified!";
-        header("Location: login.html?message=verified");
+        header("Location: user_login.php?message=verified");
         exit();
     } else {
         echo "Invalid or expired verification code.";
