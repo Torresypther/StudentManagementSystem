@@ -8,7 +8,11 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch user data from the database
+if ($user_id != 9) {
+  header("Location: std-dashb.php");
+  exit();
+}
+
 require 'db_conn.php';
 $users_stmt = $conn->prepare("SELECT user_id, CONCAT(first_name, ' ', last_name) AS full_name FROM user_table");
 $users_stmt->execute();

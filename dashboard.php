@@ -7,7 +7,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+
+if ($user_id != 9) {
+  header("Location: std-dashb.php");
+  exit();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,19 +86,20 @@ $user_id = $_SESSION['user_id'];
 
     .main-content {
       margin-left: 250px;
-      padding: 30px;
-      background-color: #f9fafb;
+      padding: 20px;
+      background-color: #ffffff;
       width: calc(100% - 250px);
       box-sizing: border-box;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* Dashboard Header */
     .dashboard-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background-color: #fff;
-      color: #3d43aa;
+      color: #333675;
       padding: 20px 30px;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -108,7 +115,7 @@ $user_id = $_SESSION['user_id'];
     .dashboard-header .date-time {
       font-size: 16px;
       font-weight: 500;
-      color: #3d43aa;
+      color: #333675;
     }
 
     /* Summary Boxes */
@@ -135,14 +142,14 @@ $user_id = $_SESSION['user_id'];
     .summary-box h4 {
       font-size: 16px;
       font-weight: 500;
-      color: #3d43aa;
+      color: #333675;
       margin-bottom: 10px;
     }
 
     .summary-box .value {
       font-size: 28px;
       font-weight: 700;
-      color: #3d43aa;
+      color: #333675;
     }
 
     .summary-box .icon {
@@ -150,7 +157,7 @@ $user_id = $_SESSION['user_id'];
       top: 10px;
       right: 10px;
       font-size: 24px;
-      color: #3d43aa;
+      color: #333675;
     }
 
     @media (max-width: 768px) {
@@ -179,52 +186,62 @@ $user_id = $_SESSION['user_id'];
       transition: background-color 0.3s;
     }
 
-    .table-container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
     .table-container h3 {
       margin-bottom: 20px;
       font-size: 20px;
       font-weight: 700;
-      color: #3d43aa;
+      color: #333675;
     }
 
     .table {
-      border-collapse: separate;
-      border-spacing: 0 10px;
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin-bottom: 20px;
     }
 
     .table th {
-      background-color: #f3f4f6;
-      color: #3d43aa;
+      background-color: #3b3d92;
+      color: #ffffff;
       font-weight: 600;
       text-align: center;
       padding: 12px;
     }
 
+    .table th:first-child {
+      border-top-left-radius: 8px;
+    }
+
+    .table th:last-child {
+      border-top-right-radius: 8px;
+    }
+
     .table td {
-      color: rgb(74, 79, 169);
+      color: #333675;
       text-align: center;
       vertical-align: middle;
       padding: 12px;
-      background-color: #fff;
       border-bottom: 1px solid #e5e7eb;
-    }
-
-    .table-hover tbody tr:hover {
-      background-color: #f1f5f9;
+      background-color: inherit;
     }
 
     .table tbody tr:nth-child(even) {
-      background-color: #f9fafb;
+      background-color: #f2f4fc;
     }
 
     .table tbody tr:nth-child(odd) {
-      background-color: #fff;
+      background-color: #e2e7f7;
+    }
+
+    .table td:first-child,
+    .table th:first-child {
+      border-left: none;
+    }
+
+    .table td:last-child,
+    .table th:last-child {
+      border-right: none;
+      text-align: center;
     }
 
     .table-container .no-data {
@@ -261,11 +278,12 @@ $user_id = $_SESSION['user_id'];
 
     .status {
       font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 5px;
+      padding: 5px 10px;
+      border-radius: 20px;
       display: inline-block;
       text-align: center;
-      margin: 0 auto;
+      font-size: 14px;
+      background-color: inherit;
     }
 
     .status.verified {
@@ -278,7 +296,6 @@ $user_id = $_SESSION['user_id'];
       color: #b91c1c;
     }
 
-    /* User Profile Section in Sidebar */
     .user-profile {
       margin-top: auto;
       text-align: center;
@@ -384,6 +401,7 @@ $user_id = $_SESSION['user_id'];
     <!-- Student List Table -->
     <div class="row justify-content-center table-container">
       <div class="col-12">
+        <h3>Verified Students</h3>
         <table class="table table-striped w-100">
           <thead>
             <tr>

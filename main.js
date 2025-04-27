@@ -43,7 +43,7 @@ function loginUser() {
         console.log(response);
 
         if (response.res === "success") {
-          window.location.href = "std-dashb.php";
+          window.location.href = "dashboard.php";
         } else {
           alert("Login failed: " + response.msg);
         }
