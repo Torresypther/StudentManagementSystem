@@ -24,8 +24,8 @@ $user_id = $_SESSION['user_id'];
   <link
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
     rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
   <style>
     /* General Styling */
     body {
@@ -38,12 +38,18 @@ $user_id = $_SESSION['user_id'];
     }
 
     .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
       width: 250px;
-      background-color: #1e293b;
+      background: linear-gradient(to bottom right, #484ebd, #3d43aa);
       color: #fff;
       display: flex;
       flex-direction: column;
       padding: 20px;
+      overflow-y: auto;
+      z-index: 1000;
     }
 
     .sidebar h2 {
@@ -57,19 +63,27 @@ $user_id = $_SESSION['user_id'];
       padding: 10px 15px;
       margin: 5px 0;
       border-radius: 5px;
-      display: block;
+      display: flex;
+      align-items: center;
       font-size: 16px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .sidebar a i {
+      margin-right: 10px;
     }
 
     .sidebar a:hover {
-      background-color: #334155;
+      background-color: rgb(42, 47, 152);
       color: #fff;
     }
 
     .main-content {
-      flex: 1;
+      margin-left: 250px;
       padding: 30px;
       background-color: #f9fafb;
+      width: calc(100% - 250px);
+      box-sizing: border-box;
     }
 
     /* Dashboard Header */
@@ -78,7 +92,7 @@ $user_id = $_SESSION['user_id'];
       justify-content: space-between;
       align-items: center;
       background-color: #fff;
-      color: #1e293b;
+      color: #3d43aa;
       padding: 20px 30px;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -94,26 +108,21 @@ $user_id = $_SESSION['user_id'];
     .dashboard-header .date-time {
       font-size: 16px;
       font-weight: 500;
-      color: #1e293b;
+      color: #3d43aa;
     }
 
     /* Summary Boxes */
     .summary-boxes {
       display: flex;
       gap: 20px;
-      /* Space between boxes */
       margin-bottom: 30px;
       flex-wrap: nowrap;
-      /* Prevent wrapping to the next row */
       justify-content: space-between;
-      /* Distribute boxes evenly */
     }
 
     .summary-box {
       flex-basis: 30%;
-      /* Each box takes 30% of the row width */
       max-width: 300px;
-      /* Optional: Limit the maximum width */
       background-color: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -126,14 +135,14 @@ $user_id = $_SESSION['user_id'];
     .summary-box h4 {
       font-size: 16px;
       font-weight: 500;
-      color: #1e293b;
+      color: #3d43aa;
       margin-bottom: 10px;
     }
 
     .summary-box .value {
       font-size: 28px;
       font-weight: 700;
-      color: #1e293b;
+      color: #3d43aa;
     }
 
     .summary-box .icon {
@@ -141,24 +150,33 @@ $user_id = $_SESSION['user_id'];
       top: 10px;
       right: 10px;
       font-size: 24px;
-      color: #6b7280;
+      color: #3d43aa;
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .main-content {
+        margin-left: 200px;
+        padding: 20px;
+      }
+
       .summary-boxes {
         flex-direction: column;
-        /* Stack boxes vertically */
         gap: 15px;
-        /* Reduce gap between boxes */
       }
 
       .summary-box {
         flex-basis: 100%;
-        /* Each box takes full width */
         max-width: 100%;
-        /* Remove maximum width */
       }
+    }
+
+    .summary-box:hover {
+      background-color: #f3f4f6;
+      transition: background-color 0.3s;
     }
 
     .table-container {
@@ -172,7 +190,7 @@ $user_id = $_SESSION['user_id'];
       margin-bottom: 20px;
       font-size: 20px;
       font-weight: 700;
-      color: #1e293b;
+      color: #3d43aa;
     }
 
     .table {
@@ -182,14 +200,14 @@ $user_id = $_SESSION['user_id'];
 
     .table th {
       background-color: #f3f4f6;
-      color: #1e293b;
+      color: #3d43aa;
       font-weight: 600;
       text-align: center;
       padding: 12px;
     }
 
     .table td {
-      color: #4b5563;
+      color: rgb(74, 79, 169);
       text-align: center;
       vertical-align: middle;
       padding: 12px;
@@ -199,6 +217,21 @@ $user_id = $_SESSION['user_id'];
 
     .table-hover tbody tr:hover {
       background-color: #f1f5f9;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+
+    .table tbody tr:nth-child(odd) {
+      background-color: #fff;
+    }
+
+    .table-container .no-data {
+      text-align: center;
+      color: #6b7280;
+      font-size: 16px;
+      padding: 20px;
     }
 
     .profile-img {
@@ -226,36 +259,6 @@ $user_id = $_SESSION['user_id'];
       background-color: #dc2626;
     }
 
-    .dashboard-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #fff;
-      /* White background */
-      color: #1e293b;
-      /* Sidebar color for text */
-      padding: 20px 30px;
-      /* Padding for spacing */
-      border-radius: 8px;
-      /* Rounded corners */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      /* Subtle shadow */
-      margin-bottom: 20px;
-      /* Space below the header */
-    }
-
-    .dashboard-header h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin: 0;
-    }
-
-    .dashboard-header .date-time {
-      font-size: 16px;
-      font-weight: 500;
-      color: #1e293b;
-    }
-
     .status {
       font-weight: 500;
       padding: 2px 8px;
@@ -278,11 +281,9 @@ $user_id = $_SESSION['user_id'];
     /* User Profile Section in Sidebar */
     .user-profile {
       margin-top: auto;
-      /* Push the profile section to the bottom */
       text-align: center;
       padding: 20px 0;
       border-top: 1px solid #334155;
-      /* Add a subtle border at the top */
     }
 
     .user-profile .profile-img {
@@ -295,7 +296,6 @@ $user_id = $_SESSION['user_id'];
 
     .user-profile .user-info {
       color: #cbd5e1;
-      /* Light gray text */
     }
 
     .user-profile .user-name {
@@ -307,7 +307,6 @@ $user_id = $_SESSION['user_id'];
 
     .user-profile .logout-btn {
       background-color: #ef4444;
-      /* Red background */
       border: none;
       color: #fff;
       padding: 5px 10px;
@@ -318,7 +317,6 @@ $user_id = $_SESSION['user_id'];
 
     .user-profile .logout-btn:hover {
       background-color: #dc2626;
-      /* Darker red on hover */
     }
   </style>
 </head>
@@ -326,11 +324,9 @@ $user_id = $_SESSION['user_id'];
 <body>
   <div class="sidebar">
     <h2>Dashboard</h2>
-    <a href="#"><i class="bi bi-house-door"></i> Home</a>
-    <a href="#"><i class="bi bi-people"></i> Students</a>
-    <a href="#"><i class="bi bi-book"></i> Courses</a>
-    <a href="#"><i class="bi bi-bar-chart"></i> Reports</a>
-    <a href="#"><i class="bi bi-gear"></i> Settings</a>
+    <a href="dashboard.php"><i class="bi bi-house-door"></i> Home</a>
+    <a href="task-maker.php"><i class="bi bi-book"></i> Tasks</a>
+    <a href="churn_prediction.html"><i class="bi bi-book"></i> Churn Prediction</a>
 
     <div class="user-profile">
       <div class="profile-edit-trigger" data-bs-toggle="modal" data-bs-target="#editProfileModal">
@@ -348,7 +344,9 @@ $user_id = $_SESSION['user_id'];
   <div class="main-content">
     <!-- Dashboard Header -->
     <div class="dashboard-header">
-      <h1>Dashboard</h1>
+      <h1 class="dashboard-title">
+        <i class="bi bi-kanban"></i> Welcome to your Dashboard
+      </h1>
       <div class="date-time" id="dateTime"></div>
     </div>
 

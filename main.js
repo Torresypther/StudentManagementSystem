@@ -1,13 +1,27 @@
 $(document).ready(function () {
-  // Initialize all functionalities
-  loginUser();
-  fetchStudentData();
-  handleUserRegistration();
-  enableProfileEditing();
+  const currentPage = window.location.pathname.split("/").pop();
+
+  if (currentPage === "user_login.php") {
+    loginUser();
+  }
+  if (currentPage === "register.html") {
+    handleUserRegistration();
+  }
+
+  if (currentPage === "dashboard.php") {
+    fetchStudentData();
+  }
+
+  if (currentPage === "task-maker.php") {
+    handleTaskAdd();
+    fetchTaskData();
+  }
+
   fetchLoggedInUserData();
-  handleProfileFormSubmission();
-  handleLogout();
   handleProfileEditTrigger();
+  enableProfileEditing();
+  handleProfileFormSubmission();
+  handleLogout(); // Logout functionality can be global
 });
 
 function loginUser() {
@@ -29,7 +43,7 @@ function loginUser() {
         console.log(response);
 
         if (response.res === "success") {
-          window.location.href = "dashboard.php";
+          window.location.href = "std-dashb.php";
         } else {
           alert("Login failed: " + response.msg);
         }
@@ -39,6 +53,32 @@ function loginUser() {
         alert("An error occurred while processing your request.");
       });
   });
+}
+
+// Fetch and display logged-in user data
+function fetchLoggedInUserData() {
+  $.ajax({
+    url: "logged_user.php",
+    type: "POST",
+    dataType: "json",
+  })
+    .done(function (data) {
+      if (data && data.first_name && data.last_name) {
+        $(".user-name").text(`${data.first_name} ${data.last_name}`);
+        const profileSrc =
+          data.profile && data.profile.trim() !== ""
+            ? data.profile
+            : "profiles/default.jpg";
+        $(".profile-img").attr("src", profileSrc);
+      } else {
+        console.error("Invalid user data received");
+        $(".profile-img").attr("src", "profiles/default.jpg");
+      }
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      console.error("Error fetching user data: ", textStatus, errorThrown);
+      $(".profile-img").attr("src", "profiles/default.jpg");
+    });
 }
 
 function fetchStudentData() {
@@ -123,37 +163,18 @@ function handleUserRegistration() {
 
 // Enable profile editing in the modal
 function enableProfileEditing() {
-  document.getElementById("enableEditButton").addEventListener("click", function () {
-    const inputs = document.querySelectorAll("#editProfileForm input, #editProfileForm select");
-    inputs.forEach((input) => {
-      input.disabled = false;
-    });
+  document
+    .getElementById("enableEditButton")
+    .addEventListener("click", function () {
+      const inputs = document.querySelectorAll(
+        "#editProfileForm input, #editProfileForm select"
+      );
+      inputs.forEach((input) => {
+        input.disabled = false;
+      });
 
-    document.getElementById("saveChangesButton").disabled = false;
-    this.disabled = true;
-  });
-}
-
-// Fetch and display logged-in user data
-function fetchLoggedInUserData() {
-  $.ajax({
-    url: "logged_user.php",
-    type: "GET",
-    dataType: "json",
-  })
-    .done(function (data) {
-      if (data && data.first_name && data.last_name) {
-        $(".user-name").text(`${data.first_name} ${data.last_name}`);
-        const profileSrc = data.profile && data.profile.trim() !== "" ? data.profile : "profiles/default.jpg";
-        $(".profile-img").attr("src", profileSrc);
-      } else {
-        console.error("Invalid user data received");
-        $(".profile-img").attr("src", "profiles/default.jpg");
-      }
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-      console.error("Error fetching user data: ", textStatus, errorThrown);
-      $(".profile-img").attr("src", "profiles/default.jpg");
+      document.getElementById("saveChangesButton").disabled = false;
+      this.disabled = true;
     });
 }
 
@@ -201,31 +222,111 @@ function handleLogout() {
   });
 }
 
-// Fetch and populate profile data in the modal when triggered
-function handleProfileEditTrigger() {
-  document.querySelector(".profile-edit-trigger").addEventListener("click", function () {
+//Handle Task Assignment
+function handleTaskAdd() {
+  $("#addTask").submit(function (event) {
+    event.preventDefault();
+
+    let formData = new FormData(this);
+
     $.ajax({
-      url: "get_user_profile.php", // Endpoint to fetch user profile data
+      url: "task-add.php",
       type: "POST",
       dataType: "json",
-      success: function (data) {
-        if (data) {
-          $("#fname").val(data.first_name);
-          $("#lname").val(data.last_name);
-          $("#email").val(data.email);
-          $("#address").val(data.address);
-          $("#gender").val(data.gender);
-          $("#birthdate").val(data.birthdate);
-
-          const profileSrc = data.profile && data.profile.trim() !== "" ? data.profile : "profiles/default.jpg";
-          $("#profilePreview").attr("src", profileSrc);
+      data: formData,
+      processData: false,
+      contentType: false,
+    })
+      .done(function (result) {
+        if (result.res === "success") {
+          alert("Task Assigned Successfully");
+          window.location.reload();
+          $("#addTask")[0].reset();
         } else {
-          alert("Failed to load user data.");
+          alert("Failed to assign task: " + result.msg);
         }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error fetching user data:", error);
-      },
-    });
+      })
+      .fail(function (_jqXHR, textStatus, errorThrown) {
+        console.error("AJAX error: ", textStatus, errorThrown);
+      });
   });
+}
+
+// Fetch and populate profile data in the modal when triggered
+function handleProfileEditTrigger() {
+  document
+    .querySelector(".profile-edit-trigger")
+    .addEventListener("click", function () {
+      $.ajax({
+        url: "get_user_profile.php", // Endpoint to fetch user profile data
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+          if (data) {
+            $("#fname").val(data.first_name);
+            $("#lname").val(data.last_name);
+            $("#email").val(data.email);
+            $("#address").val(data.address);
+            $("#gender").val(data.gender);
+            $("#birthdate").val(data.birthdate);
+
+            const profileSrc =
+              data.profile && data.profile.trim() !== ""
+                ? data.profile
+                : "profiles/default.jpg";
+            $("#profilePreview").attr("src", profileSrc);
+          } else {
+            alert("Failed to load user data.");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching user data:", error);
+        },
+      });
+    });
+}
+
+function fetchTaskData() {
+  $.ajax({
+    url: "task-data-get.php",
+    type: "GET",
+    dataType: "json",
+  })
+    .done(function (data) {
+      const tableBody = document.getElementById("tableBody");
+
+      if (!Array.isArray(data) || data.length === 0) {
+        tableBody.innerHTML =
+          "<tr><td colspan='5'>No tasks available</td></tr>";
+        return;
+      }
+
+      tableBody.innerHTML = "";
+
+      data.forEach((item) => {
+        const template = document.querySelector("#taskTemplate");
+        const clone = template.content.cloneNode(true);
+
+        clone.querySelector(".tname").textContent = item.task_name || "N/A";
+        clone.querySelector(".tdesc").textContent = item.task_desc || "N/A";
+        clone.querySelector(".duedate").textContent =
+          item.task_deadline || "N/A";
+
+        const statusElement = clone.querySelector(".status-tag");
+        statusElement.textContent = item.task_status || "N/A";
+
+        if (item.task_status === "pending") {
+          statusElement.classList.add("pending");
+        } else if (item.task_status === "completed") {
+          statusElement.classList.add("completed");
+        } else if (item.task_status === "overdue") {
+          statusElement.classList.add("overdue");
+        }
+
+        tableBody.appendChild(clone);
+      });
+    })
+    .fail(function () {
+      console.error("Failed to fetch task data.");
+    });
 }

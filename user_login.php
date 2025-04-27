@@ -18,7 +18,7 @@ session_start();
     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 
     body {
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      background: linear-gradient(135deg, #0060a0, #03396c);
       margin: 0;
       padding: 0;
       font-family: 'Poppins', sans-serif;
