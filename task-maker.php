@@ -111,13 +111,18 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       margin-bottom: 20px;
     }
 
-        .dashboard-title {
-      font-size: 28px; /* Slightly larger font size for emphasis */
-      font-weight: 700; /* Bold font weight */
-      color: #3d43aa; /* Match the color with other elements */
+    .dashboard-title {
+      font-size: 28px;
+      /* Slightly larger font size for emphasis */
+      font-weight: 700;
+      /* Bold font weight */
+      color: #3d43aa;
+      /* Match the color with other elements */
       margin: 0;
-      text-transform: uppercase; /* Optional: Make the text uppercase for a professional look */
-      letter-spacing: 1px; /* Optional: Add slight spacing between letters */
+      text-transform: uppercase;
+      /* Optional: Make the text uppercase for a professional look */
+      letter-spacing: 1px;
+      /* Optional: Add slight spacing between letters */
     }
 
     .dashboard-header h1 {
@@ -231,7 +236,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       border-bottom: 1px solid #e5e7eb;
     }
 
-    .tdesc{
+    .tdesc {
       max-width: 250px;
       word-wrap: break-word;
       white-space: normal;
@@ -293,24 +298,25 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
 
     .status-tag {
       display: inline-block;
+      width: 100px;
       padding: 8px 15px;
-      border-radius: 15px;
+      border-radius: 20px;
       font-size: 13.5px;
       font-weight: 600;
       text-align: center;
       color: #fff;
     }
-    
+
     .status-tag.pending {
       background-color: #fef3c7;
       color: #92400e;
     }
-    
+
     .status-tag.completed {
       background-color: #d1fae5;
       color: #065f46;
     }
-    
+
     .status-tag.overdue {
       background-color: #fee2e2;
       color: #b91c1c;
@@ -388,7 +394,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="main-content">
     <!-- Dashboard Header -->
     <div class="dashboard-header">
-            <h1 class="dashboard-title">
+      <h1 class="dashboard-title">
         <i class="bi bi-kanban"></i> Task Management
       </h1>
       <div class="date-time" id="dateTime"></div>
@@ -456,15 +462,12 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
               <th scope="col">Actions</th>
             </tr>
           </thead>
-          <tbody id="tableBody">
-            <!-- Rows will be dynamically populated here -->
-          </tbody>
+          <tbody id="tableBody"></tbody>
         </table>
 
         <!-- Template for task rows -->
         <template id="taskTemplate">
-          <tr class="std-row">
-            <td class="id" style="display: none">ID</td>
+          <tr class="std-row" data-id="">
             <td class="tname">Task_name</td>
             <td class="tdesc">Task_desc</td>
             <td class="duedate">Task_deadline</td>
@@ -472,10 +475,11 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
               <span class="status-tag">Task_Status</span>
             </td>
             <td class="actions">
-            <button type="button" class="btn btn-info btn-md"><i class="bi bi-eye"></i></button>
-            <button type="button" class="btn btn-warning btn-md"><i class="bi bi-pencil"></i></button>
-            <button type="button" class="btn btn-success btn-md"><i class="bi bi-check-circle"></i></button>
-
+              <button type="button" class="btn btn-info btn-md edit-btn">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button type="button" class="btn btn-warning btn-md"><i class="bi bi-pencil"></i></button>
+              <button type="button" class="btn btn-success btn-md"><i class="bi bi-check-circle"></i></button>
             </td>
           </tr>
         </template>
@@ -550,6 +554,48 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
 
+    <!-- View Submissions Modal -->
+    <div class="modal fade" id="viewSubmissionsModal" tabindex="-1" aria-labelledby="viewSubmissionsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header" style="background-color: #4349b5; color: white;">
+            <h5 class="modal-title" id="viewSubmissionsModalLabel">
+              <i class="bi bi-file-earmark-text"></i> Student Submissions
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <!-- Task Deadline Section -->
+            <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+              <i class="bi bi-calendar-event me-2"></i>
+              <div>
+                <strong>Task Deadline:</strong> <span id="taskDeadline">Loading...</span>
+              </div>
+            </div>
+
+            <!-- Submissions Table -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Completed At</th>
+                    <th scope="col">Submitted File/Link</th>
+                  </tr>
+                </thead>
+                <tbody id="submissionTableBody">
+                  <!-- Submissions will be dynamically populated here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const badges = document.querySelectorAll('.selectable-badge:not(.select-all)');
@@ -596,7 +642,6 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       });
     </script>
 
-
     <script>
       document.querySelector('.profile-edit-trigger').addEventListener('click', function() {
         const form = document.getElementById('editUserForm');
@@ -608,11 +653,15 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
       integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
       crossorigin="anonymous"
-      referrerpolicy="no-referrer"></script>
+      referrerpolicy="no-referrer">
+    </script>
+
     <script
       src="https://code.jquery.com/jquery-3.7.1.js"
       integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous">
+    </script>
+
     <script>
       function updateDateTime() {
         const dateTimeElement = document.getElementById("dateTime");
@@ -632,6 +681,74 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       setInterval(updateDateTime, 1000);
       updateDateTime();
     </script>
+
+    <script>
+      $(document).on("click", ".edit-btn", function() {
+        const taskRow = $(this).closest("tr");
+        const taskId = taskRow.data("id");
+        const taskDeadline = taskRow.find(".duedate").text();
+
+        if (!taskId) {
+          console.error("Task ID not found for the selected row.");
+          return;
+        }
+
+        // Set the task deadline in the modal
+        $("#taskDeadline").text(taskDeadline);
+
+        // Clear the table body before fetching new data
+        const submissionTableBody = $("#submissionTableBody");
+        submissionTableBody.empty();
+
+        // Fetch submissions for the selected task
+        $.ajax({
+          url: "fetch-submissions.php",
+          type: "GET",
+          data: {
+            task_id: taskId
+          },
+          dataType: "json",
+          success: function(response) {
+            if (response.success && response.submissions.length > 0) {
+              response.submissions.forEach((submission) => {
+                const row = `
+                      <tr>
+                        <td>${submission.full_name}</td>
+                        <td>${submission.completed_at}</td>
+                        <td>
+                          ${
+                            submission.submitted_file
+                              ? `<a href="${submission.submitted_file}" target="_blank">View File</a>`
+                              : "No File Submitted"
+                          }
+                        </td>
+                      </tr>
+                    `;
+                submissionTableBody.append(row);
+              });
+            } else {
+              submissionTableBody.append(`
+                    <tr>
+                      <td colspan="3" class="text-center">No submissions found for this task.</td>
+                    </tr>
+                  `);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error("Error fetching submissions:", error);
+            submissionTableBody.append(`
+                  <tr>
+                    <td colspan="3" class="text-center text-danger">Error fetching submissions.</td>
+                  </tr>
+                `);
+          },
+        });
+
+        // Show the modal
+        $("#viewSubmissionsModal").modal("show");
+      });
+    </script>
+
     <script src="main.js"></script>
 </body>
 

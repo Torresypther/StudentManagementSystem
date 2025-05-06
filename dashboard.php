@@ -221,7 +221,7 @@ if ($user_id != 9) {
       text-align: center;
       vertical-align: middle;
       padding: 12px;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 2px solid #e5e7eb;
       background-color: inherit;
     }
 
@@ -277,12 +277,13 @@ if ($user_id != 9) {
     }
 
     .status {
-      font-weight: 500;
-      padding: 5px 10px;
-      border-radius: 20px;
+      width: 100px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 50px;
       display: inline-block;
       text-align: center;
-      font-size: 14px;
+      font-size: 12.5px;
       background-color: inherit;
     }
 
@@ -317,7 +318,7 @@ if ($user_id != 9) {
 
     .user-profile .user-name {
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 400;
       margin: 0;
       margin-bottom: 10px;
     }
@@ -508,10 +509,12 @@ if ($user_id != 9) {
     integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
+
   <script
     src="https://code.jquery.com/jquery-3.7.1.js"
     integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
     crossorigin="anonymous"></script>
+
   <script>
     function updateDateTime() {
       const dateTimeElement = document.getElementById("dateTime");
@@ -531,6 +534,7 @@ if ($user_id != 9) {
     setInterval(updateDateTime, 1000);
     updateDateTime();
   </script>
+  
   <script src="main.js"></script>
 </body>
 

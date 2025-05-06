@@ -14,9 +14,8 @@ if (!$user_id) {
 }
 
 try {
-    // Join tasks and task_assignments tables to fetch tasks assigned to the user
     $stmt = $conn->prepare("
-        SELECT t.task_id, t.task_name, t.task_desc, t.task_deadline, t.task_status
+        SELECT t.task_id, t.task_name, t.task_desc, t.task_deadline, ta.task_status AS task_status
         FROM tasks t
         INNER JOIN task_assignments ta ON t.task_id = ta.task_id
         WHERE ta.student_id = ?

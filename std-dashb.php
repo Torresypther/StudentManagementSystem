@@ -2,8 +2,8 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-  header("Location: user_login.php");
-  exit();
+    header("Location: user_login.php");
+    exit();
 }
 
 $user_id = $_SESSION['user_id'];
@@ -16,15 +16,17 @@ $user_id = $_SESSION['user_id'];
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
-        rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
@@ -43,7 +45,7 @@ $user_id = $_SESSION['user_id'];
             left: 0;
             height: 100%;
             width: 250px;
-            background: linear-gradient(to bottom right, #484ebd, #3d43aa);
+            background: linear-gradient(to bottom right, #007358, rgb(1, 101, 77));
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -58,7 +60,7 @@ $user_id = $_SESSION['user_id'];
         }
 
         .sidebar a {
-            color: #cbd5e1;
+            color: #c8ffe9;
             text-decoration: none;
             padding: 10px 15px;
             margin: 5px 0;
@@ -69,15 +71,20 @@ $user_id = $_SESSION['user_id'];
             transition: background-color 0.3s, color 0.3s;
         }
 
+        .sidebar a i {
+            margin-right: 10px;
+            /* Adds space between the icon and the text */
+        }
+
         .sidebar a:hover {
-            background-color: rgb(42, 47, 152);
+            background-color: rgb(21, 214, 160);
             color: #fff;
         }
 
         .main-content {
             margin-left: 250px;
             padding: 30px;
-            background-color: #f9fafb;
+            background-color: #e8fff7;
             width: calc(100% - 250px);
             box-sizing: border-box;
         }
@@ -87,7 +94,7 @@ $user_id = $_SESSION['user_id'];
             justify-content: space-between;
             align-items: center;
             background-color: #fff;
-            color: #3d43aa;
+            color: #007358;
             padding: 20px 30px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -103,7 +110,7 @@ $user_id = $_SESSION['user_id'];
         .dashboard-header .date-time {
             font-size: 16px;
             font-weight: 500;
-            color: #3d43aa;
+            color: #007358;
         }
 
         .table-container {
@@ -117,7 +124,7 @@ $user_id = $_SESSION['user_id'];
             margin-bottom: 20px;
             font-size: 20px;
             font-weight: 700;
-            color: #3d43aa;
+            color: #007358;
         }
 
         .table {
@@ -126,15 +133,23 @@ $user_id = $_SESSION['user_id'];
         }
 
         .table th {
-            background-color: #f3f4f6;
-            color: #3d43aa;
+            color: #c8ffe9;
+            background-color: #007358;
             font-weight: 600;
             text-align: center;
             padding: 12px;
         }
 
+        .table th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        .table th:last-child {
+            border-top-right-radius: 8px;
+        }
+
         .table td {
-            color: rgb(74, 79, 169);
+            color: #007358;
             text-align: center;
             vertical-align: middle;
             padding: 12px;
@@ -150,20 +165,20 @@ $user_id = $_SESSION['user_id'];
         }
 
         .table-hover tbody tr:hover {
-            background-color: #f1f5f9;
+            background-color: rgb(179, 246, 219);
         }
 
         .table tbody tr:nth-child(even) {
-            background-color: #f9fafb;
+            background-color: #e8fff7;
         }
 
         .table tbody tr:nth-child(odd) {
-            background-color: #fff;
+            background-color: #c8ffe9;
         }
 
         .table-container .no-data {
             text-align: center;
-            color: #6b7280;
+            color: #e8fff7;
             font-size: 16px;
             padding: 20px;
         }
@@ -196,7 +211,7 @@ $user_id = $_SESSION['user_id'];
         .status {
             font-weight: 500;
             padding: 2px 8px;
-            border-radius: 5px;
+            border-radius: 15px;
             display: inline-block;
             text-align: center;
             margin: 0 auto;
@@ -228,12 +243,12 @@ $user_id = $_SESSION['user_id'];
         }
 
         .user-profile .user-info {
-            color: #cbd5e1;
+            color: #c8ffe9;
         }
 
         .user-profile .user-name {
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 400;
             margin: 0;
             margin-bottom: 10px;
         }
@@ -251,16 +266,170 @@ $user_id = $_SESSION['user_id'];
         .user-profile .logout-btn:hover {
             background-color: #dc2626;
         }
+
+        /* Modal Header */
+        .modal-header {
+            background-color: #007358;
+            /* Primary green color */
+            color: #ffffff;
+            /* White text for contrast */
+            border-bottom: none;
+            /* Remove default border */
+        }
+
+        .modal-header .btn-close {
+            background-color: #ffffff;
+            /* White close button */
+            border: none;
+            opacity: 1;
+        }
+
+        .modal-header .btn-close:hover {
+            background-color: #c8ffe9;
+            /* Light green hover effect */
+        }
+
+        /* Modal Title */
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            background-color: rgb(251, 255, 254);
+            /* Light green background */
+            color: #007358;
+            /* Primary text color */
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .modal-footer {
+            background-color: rgb(251, 255, 254);
+            /* Light green background */
+            border-top: none;
+            /* Remove default border */
+        }
+
+        .modal-footer .btn-primary {
+            background-color: #007358;
+            border: none;
+            color: #ffffff;
+        }
+
+        .modal-footer .btn-primary:hover {
+            background-color: rgb(1, 101, 77);
+        }
+
+        .modal-footer .btn-secondary {
+            background-color: #c8ffe9;
+            border: none;
+            color: #007358;
+        }
+
+        .modal-footer .btn-secondary:hover {
+            background-color: #b3f6db;
+        }
+
+        .modal-body .form-control {
+            border: 1px solid #007358;
+            border-radius: 5px;
+            padding: 10px;
+            color: #007358;
+        }
+
+        .modal-body .form-control:focus {
+            border-color: rgb(1, 101, 77);
+            box-shadow: 0 0 5px rgba(1, 101, 77, 0.5);
+        }
+
+        .modal-body label {
+            font-weight: 600;
+            color: #007358;
+        }
+
+        .modal-body .input-file label,
+        .modal-body .input-link label {
+            font-weight: 600;
+            color: #007358;
+        }
+
+        .modal-body .input-file input,
+        .modal-body .input-link input {
+            border: 1px solid #007358;
+            border-radius: 5px;
+            padding: 10px;
+            color: #007358;
+        }
+
+        .modal-body .text h5 {
+            color: #007358;
+            font-weight: 700;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        /* Modal Field Tags */
+        .modal-body .tag {
+            display: inline-block;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            border-radius: 20px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* Specific Colors for Tags */
+        .modal-body .tag.task-name {
+            background-color: #007358;
+            /* Primary green */
+        }
+
+        .modal-body .tag.deadline {
+            background-color: #f59e0b;
+            /* Warning yellow */
+        }
+
+        .modal-body .tag.status {
+            background-color: #10b981;
+            /* Success green */
+        }
+
+        .modal-body .tag.description {
+            background-color: #3b82f6;
+            /* Info blue */
+        }
+
+        .modal-body .tag.submission {
+            background-color: #6b7280;
+            /* Secondary gray */
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Hover Effect for Submission Link */
+        .modal-body .tag.submission:hover {
+            background-color: #4b5563;
+            /* Darker gray */
+            text-decoration: none;
+        }
     </style>
+
 </head>
 
 <body>
+    <!-- Sidebar -->
     <div class="sidebar">
         <h2>Dashboard</h2>
         <a href="#"><i class="bi bi-house-door"></i> Home</a>
         <a href="std-dashb.php"><i class="bi bi-book"></i> My Tasks</a>
         <a href="churn_prediction.html"><i class="bi bi-book"></i> Churn Prediction</a>
 
+        <!-- User Profile Section -->
         <div class="user-profile">
             <div class="profile-edit-trigger" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                 <img src="profiles/default.jpg" alt="Profile Picture" class="profile-img" />
@@ -274,6 +443,7 @@ $user_id = $_SESSION['user_id'];
         </div>
     </div>
 
+    <!-- Main Content -->
     <div class="main-content">
         <div class="dashboard-header">
             <h1 class="dashboard-title">
@@ -281,7 +451,7 @@ $user_id = $_SESSION['user_id'];
             </h1>
             <div class="date-time" id="dateTime"></div>
         </div>
-
+        <!-- Pending Tasks Table -->
         <div class="row justify-content-center table-container">
             <div class="col-12 mb-4">
                 <h3>Pending Tasks</h3>
@@ -298,24 +468,21 @@ $user_id = $_SESSION['user_id'];
                     <tbody id="pendingTasksBody"></tbody>
                 </table>
             </div>
-
+            <!-- Pending Task Template -->
             <template id="pendingTaskTemplate">
-                <tr>
+                <tr data-id="">
                     <td class="task-name">Task Name</td>
                     <td class="task-desc">Description</td>
                     <td class="task-deadline">Deadline</td>
                     <td class="task-status">Status</td>
                     <td>
-                        <button class="btn btn-warning btn-sm edit-btn">
-                            <i class="bi bi-eye"></i> View
-                        </button>
-                        <button class="btn btn-secondary btn-sm edit-btn">
-                            <i class="bi bi-paperclip"></i> Attach
+                        <button type="button" class="btn btn-info btn-md attach-file-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="bi bi-paperclip"></i>
                         </button>
                     </td>
                 </tr>
             </template>
-
+            <!-- Completed Tasks Table -->
             <div class="col-12">
                 <h3>Completed Tasks</h3>
                 <table class="table table-striped w-100">
@@ -331,15 +498,15 @@ $user_id = $_SESSION['user_id'];
                     <tbody id="completedTasksBody"></tbody>
                 </table>
             </div>
-
+            <!-- Completed Task Template -->
             <template id="completedTaskTemplate">
-                <tr>
+                <tr data-id="">
                     <td class="task-name">Task Name</td>
                     <td class="task-desc">Description</td>
                     <td class="task-deadline">Deadline</td>
                     <td class="task-status">Status</td>
                     <td>
-                    <button class="btn btn-warning btn-sm edit-btn">
+                        <button class="btn btn-warning btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#viewTaskModal">
                             <i class="bi bi-eye"></i> View
                         </button>
                     </td>
@@ -348,6 +515,7 @@ $user_id = $_SESSION['user_id'];
         </div>
     </div>
 
+    <!-- Edit Profile Modal -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -414,6 +582,94 @@ $user_id = $_SESSION['user_id'];
         </div>
     </div>
 
+    <!--Student Submission Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Submission Portal</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="formContainer">
+                        <form id="submissionForm" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="task_id" id="task_id" value="1" />
+                            <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>" />
+                            <div class="input-file">
+                                <label for="file">File</label>
+                                <input type="file" name="student_file" id="file" class="form-control" />
+                            </div>
+                            <div class="text">
+                                <h5>OR</h5>
+                            </div>
+                            <div class="input-link">
+                                <label for="link">Link</label>
+                                <input type="text" name="link" id="link" class="form-control" placeholder="www.example.com" />
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Task Modal -->
+    <div class="modal fade" id="viewTaskModal" tabindex="-1" aria-labelledby="viewTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewTaskModalLabel">View Completed Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Task Name, Deadline, and Status in One Row -->
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Task Name</label>
+                            <input type="text" id="viewTaskName" class="form-control bg-light text-muted" readonly />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Deadline</label>
+                            <input type="text" id="viewTaskDeadline" class="form-control bg-light text-muted" readonly />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Status</label>
+                            <input type="text" id="viewTaskStatus" class="form-control bg-light text-muted" readonly />
+                        </div>
+                    </div>
+                    <!-- Description Below -->
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea id="viewTaskDescription" class="form-control bg-light text-muted" rows="3" readonly></textarea>
+                        </div>
+                    </div>
+                    <!-- View Submission Below Description -->
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Submitted: File or Link</label>
+                            <a href="#" id="viewTaskSubmission" target="_blank" class="btn btn-link">View File/Link</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js" integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- jQuery Fallback -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!-- Script for Profile Edit Trigger -->
     <script>
         document.querySelector('.profile-edit-trigger').addEventListener('click', function() {
             const form = document.getElementById('editUserForm');
@@ -421,17 +677,7 @@ $user_id = $_SESSION['user_id'];
         });
     </script>
 
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
-        integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer">
-    </script>
-    <script
-        src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous">
-    </script>
+    <!-- Script for Updating Date and Time -->
     <script>
         function updateDateTime() {
             const dateTimeElement = document.getElementById("dateTime");
@@ -452,64 +698,129 @@ $user_id = $_SESSION['user_id'];
         updateDateTime();
     </script>
 
+    <!-- Script for Handling Attach File Button -->
     <script>
+        $(document).on("click", ".attach-file-btn", function() {
+            const taskRow = $(this).closest("tr"); // Get the closest table row
+            const taskId = taskRow.data("id"); // Fetch the task_id from the row's data-id attribute
+            const userId = <?php echo json_encode($user_id); ?>; // Get user_id from PHP session
+
+            if (taskId && userId) {
+                // Set the task_id and user_id in the hidden input fields of the submission form
+                $("#submissionForm").find("input[name='task_id']").val(taskId);
+                $("#submissionForm").find("input[name='user_id']").val(userId);
+            } else {
+                console.error("Task ID or User ID not found for the clicked row.");
+            }
+        });
+    </script>
+
+    <!-- Script for Fetching User Tasks -->
+    <script>
+        // Define user_id from PHP session at the top
+        const user_id = <?php echo json_encode($user_id); ?>;
+        console.log("User ID:", user_id);
+
         function fetchUserTasks(user_id) {
             $.ajax({
-                url: "std-tasks.php",
-                type: "GET",
-                data: { user_id: user_id },
-                dataType: "json",
-            })
-            .done(function(data) {
-                console.log("Tasks fetched successfully:", data);
+                    url: "std-tasks.php",
+                    type: "GET",
+                    data: {
+                        user_id: user_id
+                    },
+                    dataType: "json",
+                })
+                .done(function(data) {
+                    console.log("Tasks fetched successfully:", data);
 
-                const pendingTasksBody = document.getElementById("pendingTasksBody");
-                const completedTasksBody = document.getElementById("completedTasksBody");
-                pendingTasksBody.innerHTML = "";
-                completedTasksBody.innerHTML = "";
+                    const pendingTasksBody = document.getElementById("pendingTasksBody");
+                    const completedTasksBody = document.getElementById("completedTasksBody");
+                    pendingTasksBody.innerHTML = "";
+                    completedTasksBody.innerHTML = "";
 
-                const pendingTaskTemplate = document.getElementById("pendingTaskTemplate");
-                const completedTaskTemplate = document.getElementById("completedTaskTemplate");
+                    const pendingTaskTemplate = document.getElementById("pendingTaskTemplate");
+                    const completedTaskTemplate = document.getElementById("completedTaskTemplate");
 
-                if (!pendingTaskTemplate || !completedTaskTemplate) {
-                    console.error("Task templates not found in the DOM.");
-                    return;
-                }
-
-                data.forEach(task => {
-                    let taskRow;
-
-                    if (task.task_status === "pending") {
-                        taskRow = pendingTaskTemplate.content.cloneNode(true);
-                    } else if (task.task_status === "completed") {
-                        taskRow = completedTaskTemplate.content.cloneNode(true);
-                    } else {
+                    if (!pendingTaskTemplate || !completedTaskTemplate) {
+                        console.error("Task templates not found in the DOM.");
                         return;
                     }
 
-                    taskRow.querySelector(".task-name").textContent = task.task_name;
-                    taskRow.querySelector(".task-desc").textContent = task.task_desc;
-                    taskRow.querySelector(".task-deadline").textContent = task.task_deadline;
-                    taskRow.querySelector(".task-status").textContent = task.task_status;
+                    data.forEach(task => {
+                        let taskRow;
 
-                    if (task.task_status === "pending") {
-                        pendingTasksBody.appendChild(taskRow);
-                    } else if (task.task_status === "completed") {
-                        completedTasksBody.appendChild(taskRow);
-                    }
+                        if (task.task_status === "pending") {
+                            taskRow = pendingTaskTemplate.content.cloneNode(true);
+                        } else if (task.task_status === "completed") {
+                            taskRow = completedTaskTemplate.content.cloneNode(true);
+                        } else {
+                            return;
+                        }
+
+                        taskRow.querySelector(".task-name").textContent = task.task_name;
+                        taskRow.querySelector(".task-desc").textContent = task.task_desc;
+                        taskRow.querySelector(".task-deadline").textContent = task.task_deadline;
+                        taskRow.querySelector(".task-status").textContent = task.task_status;
+
+                        const row = taskRow.querySelector("tr");
+                        row.setAttribute("data-id", task.task_id);
+
+                        if (task.task_status === "pending") {
+                            pendingTasksBody.appendChild(taskRow);
+                        } else if (task.task_status === "completed") {
+                            completedTasksBody.appendChild(taskRow);
+                        }
+                    });
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error("Failed to fetch user tasks:", textStatus, errorThrown);
                 });
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.error("Failed to fetch user tasks:", textStatus, errorThrown);
-            });
         }
-
-        const user_id = <?php echo json_encode($user_id); ?>;
-        console.log("User ID:", user_id);
 
         fetchUserTasks(user_id);
     </script>
 
+    <!-- Script for Viewing Task Details -->
+    <script>
+        $(document).on("click", ".edit-btn", function() {
+            const taskRow = $(this).closest("tr");
+            const taskId = taskRow.data("id");
+            const userId = <?php echo json_encode($user_id); ?>;
+
+            if (taskId && userId) {
+                $.ajax({
+                    url: "std-task-details.php",
+                    type: "GET",
+                    data: {
+                        task_id: taskId,
+                        user_id: userId,
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {
+                            // Populate the modal fields
+                            $("#viewTaskName").val(data.task_name);
+                            $("#viewTaskDeadline").val(data.task_deadline);
+                            $("#viewTaskStatus").val(data.task_status);
+                            $("#viewTaskDescription").val(data.task_desc);
+                            $("#viewTaskSubmission").attr("href", data.submitted_file).text("View File/Link");
+                        } else {
+                            alert("Failed to fetch task details: " + data.msg);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error fetching task details:", textStatus, errorThrown);
+                        alert("An error occurred while fetching task details.");
+                    },
+                });
+            } else {
+                console.error("Task ID or User ID not found for the clicked row.");
+            }
+        });
+    </script>
+
+    <!-- Main JS File -->
     <script src="main.js"></script>
 </body>
+
 </html>

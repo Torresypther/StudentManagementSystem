@@ -16,6 +16,9 @@ $(document).ready(function () {
     handleTaskAdd();
     fetchTaskData();
   }
+  if (currentPage === "std-dashb.php") {
+    handleStudentSubmissions();
+  }
 
   fetchLoggedInUserData();
   handleProfileEditTrigger();
@@ -161,6 +164,36 @@ function handleUserRegistration() {
   });
 }
 
+//handle student submissions
+function handleStudentSubmissions() {
+  $("#submissionForm").submit(function (event) {
+    event.preventDefault();
+
+    let formData = new FormData(this);
+
+    $.ajax({
+      url: "std-submit.php",
+      type: "POST",
+      dataType: "json",
+      data: formData,
+      processData: false,
+      contentType: false,
+    })
+      .done(function (result) {
+        if (result.res === "success") {
+          alert("Submitted Successfully");
+          window.location.reload();
+        } else {
+          alert("Failed to Submit: " + result.msg);
+        }
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        console.error("AJAX error: ", textStatus, errorThrown);
+        alert("An error occurred while submitting. Please try again.");
+      });
+  });
+}
+
 // Enable profile editing in the modal
 function enableProfileEditing() {
   document
@@ -288,25 +321,31 @@ function handleProfileEditTrigger() {
 
 function fetchTaskData() {
   $.ajax({
-    url: "task-data-get.php",
+    url: "task-data-get.php", // Backend endpoint to fetch task data
     type: "GET",
     dataType: "json",
-  })
-    .done(function (data) {
+    success: function (data) {
       const tableBody = document.getElementById("tableBody");
+
+      // Clear existing rows
+      tableBody.innerHTML = "";
 
       if (!Array.isArray(data) || data.length === 0) {
         tableBody.innerHTML =
-          "<tr><td colspan='5'>No tasks available</td></tr>";
+          "<tr><td colspan='5' class='text-center'>No tasks available</td></tr>";
         return;
       }
-
-      tableBody.innerHTML = "";
 
       data.forEach((item) => {
         const template = document.querySelector("#taskTemplate");
         const clone = template.content.cloneNode(true);
 
+        // Set task_id in the data-id attribute
+        const row = clone.querySelector("tr");
+        row.setAttribute("data-id", item.task_id);
+        console.log("Task ID from backend:", item.task_id);
+
+        // Populate other fields
         clone.querySelector(".tname").textContent = item.task_name || "N/A";
         clone.querySelector(".tdesc").textContent = item.task_desc || "N/A";
         clone.querySelector(".duedate").textContent =
@@ -315,6 +354,7 @@ function fetchTaskData() {
         const statusElement = clone.querySelector(".status-tag");
         statusElement.textContent = item.task_status || "N/A";
 
+        // Add status-specific classes
         if (item.task_status === "pending") {
           statusElement.classList.add("pending");
         } else if (item.task_status === "completed") {
@@ -323,10 +363,12 @@ function fetchTaskData() {
           statusElement.classList.add("overdue");
         }
 
+        // Append the cloned row to the table body
         tableBody.appendChild(clone);
       });
-    })
-    .fail(function () {
-      console.error("Failed to fetch task data.");
-    });
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching task data:", error);
+    },
+  });
 }

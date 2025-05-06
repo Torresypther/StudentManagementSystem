@@ -21,35 +21,77 @@
       rel="stylesheet"
     />
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <style>
       body {
         font-family: "Montserrat", sans-serif;
-        background: linear-gradient(to bottom right, #0b0f2e, #0e1835);
-        color: #ffffff;
+        background: linear-gradient(to bottom right, #f0f8ff, #e6f7ff);
+        color: #333333;
         padding: 30px 20px;
         overflow-x: hidden;
+        position: relative;
       }
-    
+
+      .background-decor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .background-decor .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(0, 123, 255, 0.1);
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+      }
+
+      .circle-1 {
+        width: 150px;
+        height: 150px;
+        top: 15%;
+        left: 12%;
+      }
+
+      .circle-2 {
+        width: 200px;
+        height: 200px;
+        bottom: 15%;
+        right: 10%;
+      }
+
+      .circle-3 {
+        width: 100px;
+        height: 100px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
       .title {
         font-size: 2.2rem;
         font-weight: 700;
         text-align: center;
         margin-bottom: 40px;
         animation: fadeIn 1s ease-in-out;
-        color: #00d2df;
+        color: #007bff;
       }
-    
+
       .bubble {
         width: 180px;
         height: 180px;
         border-radius: 50%;
-        background: radial-gradient(circle at 30% 30%, #00d2df33, #00d2df10);
-        box-shadow: 0 6px 16px rgba(0, 210, 223, 0.2);
+        background: radial-gradient(circle at 30% 30%, #007bff33, #007bff10);
+        box-shadow: 0 6px 16px rgba(0, 123, 255, 0.2);
         margin: 0 auto 50px;
         font-size: 1rem;
         font-weight: 600;
         backdrop-filter: blur(10px);
-        color: #ffffff;
+        color: #333333;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -57,76 +99,76 @@
         line-height: 1.5;
         animation: bounce 2s infinite;
       }
-    
+
       .form-wrapper {
         max-width: 1100px;
         margin: 0 auto;
         padding: 30px;
-        border: 1px solid rgba(0, 210, 223, 0.3);
+        border: 1px solid rgba(0, 123, 255, 0.3);
         border-radius: 16px;
-        background: rgba(0, 210, 223, 0.05);
+        background: rgba(0, 123, 255, 0.05);
         animation: slideIn 1s ease-in-out;
       }
-    
+
       .form-label {
         font-weight: 600;
-        color: #ffffff;
+        color: #333333;
       }
-    
+
       .form-control,
       .form-select {
-        background: rgba(255, 255, 255, 0.03);
-        color: #ffffff;
-        border: 1px solid rgba(0, 210, 223, 0.2);
+        background: rgba(255, 255, 255, 0.9);
+        color: #333333;
+        border: 1px solid rgba(0, 123, 255, 0.2);
         border-radius: 10px;
         padding: 10px;
         font-size: 1rem;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
-    
+
       .form-control:focus,
       .form-select:focus {
         transform: scale(1.02);
-        box-shadow: 0 0 10px rgba(0, 210, 223, 0.5);
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
         outline: none;
-        border-color: #00d2df;
+        border-color: #007bff;
       }
-    
+
       .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.6);
+        color: rgba(51, 51, 51, 0.6);
       }
-    
+
       .form-select option {
         color: #000;
       }
-    
+
       .btn-primary {
-        background-color: #00d2df;
+        background-color: #007bff;
         border: none;
         padding: 14px;
         font-size: 1rem;
         font-weight: 600;
         border-radius: 12px;
         transition: background-color 0.3s, transform 0.3s ease;
-        color: #000;
+        color: #fff;
       }
-    
+
       .btn-primary:hover {
-        background-color: #00bccc;
+        background-color: #0056b3;
         transform: scale(1.05);
-        color: #000;
+        color: #fff;
       }
-    
+
       .bi {
         margin-right: 6px;
       }
-    
+
       @media (max-width: 767px) {
         .form-wrapper .row .col-md-4 {
           margin-bottom: 1rem;
         }
       }
-    
+
       /* Animations */
       @keyframes fadeIn {
         from {
@@ -138,7 +180,7 @@
           transform: translateY(0);
         }
       }
-    
+
       @keyframes slideIn {
         from {
           opacity: 0;
@@ -149,9 +191,10 @@
           transform: translateX(0);
         }
       }
-    
+
       @keyframes bounce {
-        0%, 100% {
+        0%,
+        100% {
           transform: translateY(0);
         }
         50% {
@@ -162,6 +205,12 @@
     
   </head>
   <body>
+    <div class="background-decor">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+
     <div class="title">Customer Churn Prediction</div>
 
     <div class="bubble" id="bubble">
@@ -292,5 +341,57 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $("form").on("submit", function (event) {
+          event.preventDefault(); // Prevent the form from refreshing the page
+
+          // Collect form data
+          const age = $("#age").val();
+          const gender = $("#gender").val();
+          const tenure = $("#tenure").val();
+          const usageFrequency = $("#usageFrequency").val();
+          const supportCalls = $("#supportCalls").val();
+          const paymentDelay = $("#paymentDelay").val();
+          const subscriptionType = $("#subscriptionType").val();
+          const contractLength = $("#contractLength").val();
+          const totalSpend = $("#totalSpend").val();
+          const lastInteraction = $("#lastInteraction").val();
+
+          // Prepare the data to send to the API
+          const inputData = {
+            age: parseInt(age),
+            gender: gender,
+            tenure: parseInt(tenure),
+            usageFrequency: parseInt(usageFrequency),
+            supportCalls: parseInt(supportCalls),
+            paymentDelay: parseInt(paymentDelay),
+            subscriptionType: subscriptionType,
+            contractLength: contractLength,
+            totalSpend: parseFloat(totalSpend),
+            lastInteraction: parseInt(lastInteraction),
+          };
+
+          // Call the API using AJAX
+          $.ajax({
+            url: "http://localhost:8000/api/customer_churn_prediction", // Replace with your API URL
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(inputData),
+            success: function (response) {
+              // Handle the API response
+              alert(`Prediction: ${response.prediction}`);
+            },
+            error: function (xhr, status, error) {
+              console.error("Error calling the API:", error);
+              alert(
+                "An error occurred while calling the API. Please check the console for details."
+              );
+            },
+          });
+        });
+      });
+    </script>
   </body>
 </html>
