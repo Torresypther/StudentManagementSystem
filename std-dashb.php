@@ -582,7 +582,7 @@ $user_id = $_SESSION['user_id'];
         </div>
     </div>
 
-    <!--Student Submission Modal -->
+    <!-- Student Submission Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -593,19 +593,32 @@ $user_id = $_SESSION['user_id'];
                 <div class="modal-body">
                     <div class="formContainer">
                         <form id="submissionForm" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="task_id" id="task_id" value="1" />
+                            <input type="hidden" name="task_id" id="task_id" value="" />
                             <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>" />
-                            <div class="input-file">
-                                <label for="file">File</label>
-                                <input type="file" name="student_file" id="file" class="form-control" />
+
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Submission Type</label>
+                                <select name="type" id="type" class="form-control">
+                                    <option value="">Select</option>
+                                    <option value="file">File</option>
+                                    <option value="link">Link</option>
+                                </select>
                             </div>
-                            <div class="text">
+
+                            <div class="mb-3">
+                                <label for="file" class="form-label">File</label>
+                                <input type="file" name="student_file" id="file" class="form-control" disabled />
+                            </div>
+
+                            <div class="text-center my-3">
                                 <h5>OR</h5>
                             </div>
-                            <div class="input-link">
-                                <label for="link">Link</label>
-                                <input type="text" name="link" id="link" class="form-control" placeholder="www.example.com" />
+
+                            <div class="mb-3">
+                                <label for="link" class="form-label">Link</label>
+                                <input type="text" name="link" id="link" class="form-control" placeholder="www.example.com" disabled />
                             </div>
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -698,12 +711,39 @@ $user_id = $_SESSION['user_id'];
         updateDateTime();
     </script>
 
+    <!-- Handle File Type Input Enabling -->
+    <script>
+        $(document).ready(function() {
+            // Handle submission type selection
+            $("#type").on("change", function() {
+                const selectedType = $(this).val();
+
+                if (selectedType === "file") {
+                    // Enable file input and disable link input
+                    $("#file").prop("disabled", false);
+                    $("#link").prop("disabled", true).val(""); // Clear the link input
+                } else if (selectedType === "link") {
+                    // Enable link input and disable file input
+                    $("#link").prop("disabled", false);
+                    $("#file").prop("disabled", true).val(""); // Clear the file input
+                } else {
+                    // If no type is selected, disable both inputs
+                    $("#file").prop("disabled", true).val("");
+                    $("#link").prop("disabled", true).val("");
+                }
+            });
+
+            // Trigger the change event on page load to set the initial state
+            $("#type").trigger("change");
+        });
+    </script>
+
     <!-- Script for Handling Attach File Button -->
     <script>
         $(document).on("click", ".attach-file-btn", function() {
-            const taskRow = $(this).closest("tr"); // Get the closest table row
-            const taskId = taskRow.data("id"); // Fetch the task_id from the row's data-id attribute
-            const userId = <?php echo json_encode($user_id); ?>; // Get user_id from PHP session
+            const taskRow = $(this).closest("tr");
+            const taskId = taskRow.data("id");
+            const userId = <?php echo json_encode($user_id); ?>;
 
             if (taskId && userId) {
                 // Set the task_id and user_id in the hidden input fields of the submission form

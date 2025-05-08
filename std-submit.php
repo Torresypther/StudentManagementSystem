@@ -13,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $task_id = $_POST['task_id'] ?? null;
     $student_id = $_POST['user_id'] ?? null;
     $link = $_POST['link'] ?? null;
+    $type = $_POST['type'] ?? null; // Submission type (file or link)
+    $sub_status = 'submitted'; // Set submission status to 'submitted'
 
     if (!$task_id || !$student_id) {
         http_response_code(400);
@@ -59,11 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Update submission details
         $stmt = $conn->prepare("UPDATE task_assignments 
-                                SET completed_on = NOW(), submitted_file = :file_path, task_status = 'completed' 
+                                SET completed_on = NOW(), submission_type = :type, submitted_file = :file_path, submission_status = :sub_status, task_status = 'completed' 
                                 WHERE task_id = :task_id AND student_id = :student_id");
         $stmt->bindParam(':task_id', $task_id);
         $stmt->bindParam(':student_id', $student_id);
         $stmt->bindParam(':file_path', $filePath);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':sub_status', $sub_status);
 
         if ($stmt->execute()) {
             $conn->commit();
@@ -84,3 +88,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(405);
     echo json_encode(["res" => "error", "msg" => "Invalid request method"]);
 }
+?>

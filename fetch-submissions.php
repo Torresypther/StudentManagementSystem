@@ -8,6 +8,8 @@ if (isset($_GET['task_id'])) {
         SELECT 
             CONCAT(u.first_name, ' ', u.last_name) AS full_name,
             ta.completed_on AS completed_at,
+            ta.submission_type AS submission_type,
+            ta.submission_status AS submission_status,
             ta.submitted_file
         FROM task_assignments ta
         JOIN user_table u ON ta.student_id = u.user_id

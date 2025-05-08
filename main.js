@@ -15,6 +15,7 @@ $(document).ready(function () {
   if (currentPage === "task-maker.php") {
     handleTaskAdd();
     fetchTaskData();
+    handleTaskEdit();
   }
   if (currentPage === "std-dashb.php") {
     handleStudentSubmissions();
@@ -182,7 +183,7 @@ function handleStudentSubmissions() {
       .done(function (result) {
         if (result.res === "success") {
           alert("Submitted Successfully");
-          window.location.reload();
+          window.location.reload(); // Reload the page to reflect changes
         } else {
           alert("Failed to Submit: " + result.msg);
         }
@@ -321,7 +322,7 @@ function handleProfileEditTrigger() {
 
 function fetchTaskData() {
   $.ajax({
-    url: "task-data-get.php", // Backend endpoint to fetch task data
+    url: "task-data-get.php",
     type: "GET",
     dataType: "json",
     success: function (data) {
@@ -339,21 +340,23 @@ function fetchTaskData() {
       data.forEach((item) => {
         const template = document.querySelector("#taskTemplate");
         const clone = template.content.cloneNode(true);
-
+      
         // Set task_id in the data-id attribute
         const row = clone.querySelector("tr");
+      
+        // Populate data attributes
         row.setAttribute("data-id", item.task_id);
+        row.setAttribute("data-assigned-students", item.assigned_students);
         console.log("Task ID from backend:", item.task_id);
-
+      
         // Populate other fields
         clone.querySelector(".tname").textContent = item.task_name || "N/A";
         clone.querySelector(".tdesc").textContent = item.task_desc || "N/A";
-        clone.querySelector(".duedate").textContent =
-          item.task_deadline || "N/A";
-
+        clone.querySelector(".duedate").textContent = item.task_deadline || "N/A";
+      
         const statusElement = clone.querySelector(".status-tag");
         statusElement.textContent = item.task_status || "N/A";
-
+      
         // Add status-specific classes
         if (item.task_status === "pending") {
           statusElement.classList.add("pending");
@@ -362,7 +365,7 @@ function fetchTaskData() {
         } else if (item.task_status === "overdue") {
           statusElement.classList.add("overdue");
         }
-
+      
         // Append the cloned row to the table body
         tableBody.appendChild(clone);
       });
@@ -371,4 +374,34 @@ function fetchTaskData() {
       console.error("Error fetching task data:", error);
     },
   });
+}
+
+function handleTaskEdit() {
+        $("#editTaskForm").submit(function (event) {
+      event.preventDefault();
+    
+      const formData = new FormData(this);
+    
+      $.ajax({
+        url: "update-tasks.php", // Backend endpoint to update the task
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        success: function (response) {
+          if (response.success) {
+            alert(response.message);
+            $("#editTaskModal").modal("hide"); // Close the modal
+            fetchTaskData(); // Refresh the task list
+          } else {
+            alert("Failed to update task: " + response.message);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error updating task:", error);
+          alert("An error occurred while updating the task. Please try again.");
+        },
+      });
+    });
 }

@@ -475,11 +475,12 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
               <span class="status-tag">Task_Status</span>
             </td>
             <td class="actions">
-              <button type="button" class="btn btn-info btn-md edit-btn">
-                <i class="bi bi-eye"></i>
+              <button type="button" class="btn btn-info btn-md edit-btn"><i class="bi bi-eye"></i></button>
+              <!-- Button to Open the Modal -->
+              <button type="button" class="btn btn-warning btn-md" data-bs-toggle="modal" data-bs-target="#editTaskModal">
+                <i class="bi bi-pencil"></i>
               </button>
-              <button type="button" class="btn btn-warning btn-md"><i class="bi bi-pencil"></i></button>
-              <button type="button" class="btn btn-success btn-md"><i class="bi bi-check-circle"></i></button>
+
             </td>
           </tr>
         </template>
@@ -582,20 +583,134 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead class="table-light">
                   <tr>
                     <th scope="col">Student Name</th>
+                    <th scope="col">Submission Type</th>
                     <th scope="col">Completed At</th>
                     <th scope="col">Submitted File/Link</th>
+                    <th scope="col">Submission Status</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
-                <tbody id="submissionTableBody">
-                  <!-- Submissions will be dynamically populated here -->
-                </tbody>
+                <tbody id="submissionTableBody"></tbody>
               </table>
             </div>
+
+            <template id="viewTasks">
+              <tr>
+                <td class="student-name">Student Name</td>
+                <td class="submission-type">Submission Type</td>
+                <td class="completed-at">Completed At</td>
+                <td class="submitted-file">Submitted File/Link</td>
+                <td class="submission-status">
+                  <span class="status-tag">Status</span>
+                </td>
+                <td class="actions">
+                  <button type="button" class="btn btn-success btn-md"><i class="bi bi-check-circle"></i></button>
+              </tr>
+            </template>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Edit Task Modal -->
+    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editTaskForm">
+              <input type="hidden" id="editTaskId" name="task_id" />
+              <div class="mb-3">
+                <label for="editTaskName" class="form-label">Task Name</label>
+                <input type="text" class="form-control" id="editTaskName" name="task_name" required />
+              </div>
+              <div class="mb-3">
+                <label for="editTaskDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="editTaskDescription" name="description" rows="3" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="editAssignedStudents" class="form-label">Assigned Students</label>
+                <div class="border p-2 rounded" id="editAssignedStudentsContainer" style="min-height: 50px;">
+                  <!-- Select All Option -->
+                  <div class="badge bg-secondary text-white me-2 mb-2 selectable-badge select-all"
+                    style="display: inline-block; padding: 10px 15px; border-radius: 20px; cursor: pointer;">
+                    Select All
+                  </div>
+                  <?php
+                  $colors = ['bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-info']; // Array of Bootstrap colors
+                  if (count($users) > count($colors)) {
+                    for ($i = count($colors); $i < count($users); $i++) {
+                      $colors[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+                    }
+                  }
+                  $colorIndex = 0;
+                  foreach ($users as $user):
+                  ?>
+                    <div class="badge <?= $colors[$colorIndex] ?> text-white me-2 mb-2 selectable-badge"
+                      data-id="<?= htmlspecialchars($user['user_id']) ?>"
+                      style="display: inline-block; padding: 10px 15px; border-radius: 20px; cursor: pointer;">
+                      <?= htmlspecialchars($user['full_name']) ?>
+                    </div>
+                    <?php
+                    $colorIndex = ($colorIndex + 1) % count($colors); // Cycle through colors
+                    ?>
+                  <?php endforeach; ?>
+                </div>
+                <input type="hidden" id="editAssignedStudentsInput" name="assigned_students" />
+              </div>
+              <div class="mb-3">
+                <label for="editTaskDeadline" class="form-label">Due Date</label>
+                <input type="datetime-local" class="form-control" id="editTaskDeadline" name="duedate" required />
+              </div>
+              <div class="text-end">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Libraries, Dependencies -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+      integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
+    </script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous">
+    </script>
+
+    <!-- Clock -->
+    <script>
+      function updateDateTime() {
+        const dateTimeElement = document.getElementById("dateTime");
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        };
+        dateTimeElement.textContent = now.toLocaleDateString("en-US", options);
+      }
+
+      setInterval(updateDateTime, 1000);
+      updateDateTime();
+    </script>
+
+    <!-- Badge Selcetion Handler -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const badges = document.querySelectorAll('.selectable-badge:not(.select-all)');
@@ -642,6 +757,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       });
     </script>
 
+    <!-- Profile Trigger -->
     <script>
       document.querySelector('.profile-edit-trigger').addEventListener('click', function() {
         const form = document.getElementById('editUserForm');
@@ -649,39 +765,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       });
     </script>
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
-      integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer">
-    </script>
-
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.js"
-      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-      crossorigin="anonymous">
-    </script>
-
-    <script>
-      function updateDateTime() {
-        const dateTimeElement = document.getElementById("dateTime");
-        const now = new Date();
-        const options = {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        };
-        dateTimeElement.textContent = now.toLocaleDateString("en-US", options);
-      }
-
-      setInterval(updateDateTime, 1000);
-      updateDateTime();
-    </script>
-
+    <!-- View Submissions Modal -->
     <script>
       $(document).on("click", ".edit-btn", function() {
         const taskRow = $(this).closest("tr");
@@ -708,45 +792,150 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
             task_id: taskId
           },
           dataType: "json",
+
           success: function(response) {
-            if (response.success && response.submissions.length > 0) {
-              response.submissions.forEach((submission) => {
-                const row = `
-                      <tr>
-                        <td>${submission.full_name}</td>
-                        <td>${submission.completed_at}</td>
-                        <td>
-                          ${
-                            submission.submitted_file
-                              ? `<a href="${submission.submitted_file}" target="_blank">View File</a>`
-                              : "No File Submitted"
-                          }
-                        </td>
-                      </tr>
-                    `;
-                submissionTableBody.append(row);
-              });
-            } else {
-              submissionTableBody.append(`
-                    <tr>
-                      <td colspan="3" class="text-center">No submissions found for this task.</td>
-                    </tr>
-                  `);
-            }
+
+            tableBody.innerHtml = "";
+
+            response.forEach(submission => {
+              const template = document.querySelector("#viewTasks");
+              const clone = submissionTableBody.content.cloneNode(true);
+
+              clone.querySelector(".student-name").textContent = submission.student_name;
+              clone.querySelector(".submission-type").textContent = submission.submission_type;
+              clone.querySelector(".completed-at").textContent = submission.completed_at;
+              clone.querySelector(".submitted-file").textContent = submission.submitted_file || "N/A";
+              clone.querySelector(".submission-status .status-tag").textContent = submission.status;
+              clone.querySelector(".submission-status .status-tag").classList.add(submission.status.toLowerCase());
+              submissionTableBody.appendChild(clone);
+            });
           },
           error: function(xhr, status, error) {
-            console.error("Error fetching submissions:", error);
-            submissionTableBody.append(`
-                  <tr>
-                    <td colspan="3" class="text-center text-danger">Error fetching submissions.</td>
-                  </tr>
-                `);
+            console.error("Error fetching task data:", error);
           },
         });
 
         // Show the modal
         $("#viewSubmissionsModal").modal("show");
       });
+    </script>
+
+    <!-- Populate Edit Task Modal -->
+    <script>
+           $(document).on("click", ".btn-warning", function () {
+        const taskRow = $(this).closest("tr");
+        const taskId = taskRow.data("id");
+        const taskName = taskRow.find(".tname").text();
+        const taskDescription = taskRow.find(".tdesc").text();
+        const taskDeadline = taskRow.find(".duedate").text();
+      
+        // Populate the modal fields
+        $("#editTaskId").val(taskId);
+        $("#editTaskName").val(taskName);
+        $("#editTaskDescription").val(taskDescription);
+      
+        // Format the deadline for the datetime-local input
+        const formattedDeadline = new Date(taskDeadline).toISOString().slice(0, 16);
+        $("#editTaskDeadline").val(formattedDeadline);
+      
+        // Fetch all students and mark assigned ones
+        $.ajax({
+          url: "fetch-assigned-students.php",
+          type: "GET",
+          data: { task_id: taskId },
+          dataType: "json",
+          success: function (students) {
+            console.log("Students with assignment status:", students);
+      
+            // Clear the container
+            const container = $("#editAssignedStudentsContainer");
+            container.empty();
+      
+            // Add "Select All" badge
+            container.append(`
+              <div class="badge bg-secondary text-white me-2 mb-2 selectable-badge select-all"
+                style="display: inline-block; padding: 10px 15px; border-radius: 20px; cursor: pointer;">
+                Select All
+              </div>
+            `);
+      
+            // Add student badges
+            students.forEach((student) => {
+              const isSelected = student.is_assigned ? "selected-badge" : "";
+              container.append(`
+                <div class="badge bg-primary text-white me-2 mb-2 selectable-badge ${isSelected}"
+                  data-id="${student.user_id}"
+                  style="display: inline-block; padding: 10px 15px; border-radius: 20px; cursor: pointer;">
+                  ${student.full_name}
+                </div>
+              `);
+            });
+      
+            // Reinitialize badge selection handlers
+            initializeBadgeSelection();
+          },
+          error: function (xhr, status, error) {
+            console.error("Error fetching students:", error);
+          },
+        });
+      
+        // Show the modal
+        $("#editTaskModal").modal("show");
+      });
+      
+            function initializeBadgeSelection() {
+        const badges = document.querySelectorAll(".selectable-badge:not(.select-all)");
+        const selectAllBadge = document.querySelector(".select-all");
+        const hiddenInput = document.getElementById("editAssignedStudentsInput");
+        const selectedIds = new Set();
+      
+        // Prepopulate the selectedIds set with already selected badges
+        badges.forEach((badge) => {
+          if (badge.classList.contains("selected-badge")) {
+            selectedIds.add(badge.getAttribute("data-id"));
+          }
+        });
+      
+        // Function to update the hidden input
+        function updateHiddenInput() {
+          hiddenInput.value = Array.from(selectedIds).join(",");
+        }
+      
+        // Handle individual badge selection
+        badges.forEach((badge) => {
+          badge.addEventListener("click", function () {
+            const userId = this.getAttribute("data-id");
+            if (selectedIds.has(userId)) {
+              selectedIds.delete(userId);
+              this.classList.remove("selected-badge"); // Remove selection highlight
+            } else {
+              selectedIds.add(userId);
+              this.classList.add("selected-badge"); // Add selection highlight
+            }
+            updateHiddenInput();
+          });
+        });
+      
+        // Handle "Select All" functionality
+        selectAllBadge.addEventListener("click", function () {
+          if (selectedIds.size === badges.length) {
+            // Deselect all
+            selectedIds.clear();
+            badges.forEach((badge) => badge.classList.remove("selected-badge"));
+          } else {
+            // Select all
+            badges.forEach((badge) => {
+              const userId = badge.getAttribute("data-id");
+              selectedIds.add(userId);
+              badge.classList.add("selected-badge");
+            });
+          }
+          updateHiddenInput();
+        });
+      
+        // Update the hidden input initially
+        updateHiddenInput();
+      }
     </script>
 
     <script src="main.js"></script>
