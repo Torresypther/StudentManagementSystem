@@ -7,6 +7,7 @@ if (isset($_GET['task_id'])) {
     // Prepare the SQL query to fetch submissions
     $stmt = $conn->prepare("
         SELECT 
+            ta.assignment_id AS assignment_id,
             CONCAT(u.first_name, ' ', u.last_name) AS full_name,
             ta.completed_on AS completed_on,
             ta.submission_type AS submission_type,
@@ -22,7 +23,6 @@ if (isset($_GET['task_id'])) {
         $stmt->execute();
         $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Check if submissions exist
         if (!empty($submissions)) {
             echo json_encode([
                 'success' => true,
@@ -35,7 +35,6 @@ if (isset($_GET['task_id'])) {
             ]);
         }
     } catch (Exception $e) {
-        // Log the error for debugging purposes
         error_log("Error fetching submissions: " . $e->getMessage());
 
         echo json_encode([
@@ -49,4 +48,3 @@ if (isset($_GET['task_id'])) {
         'message' => 'Task ID is required.',
     ]);
 }
-?>

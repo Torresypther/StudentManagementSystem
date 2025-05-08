@@ -317,6 +317,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       background-color: #fee2e2;
       color: #b91c1c;
     }
+
     .status-tag.submitted {
       background-color: #d1fae5;
       color: #065f46;
@@ -561,7 +562,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- View Submissions Modal -->
-       <div class="modal fade" id="viewSubmissionsModal" tabindex="-1" aria-labelledby="viewSubmissionsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewSubmissionsModal" tabindex="-1" aria-labelledby="viewSubmissionsModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <!-- Modal Header -->
@@ -571,7 +572,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-    
+
           <!-- Modal Body -->
           <div class="modal-body">
             <!-- Task Deadline Section -->
@@ -581,7 +582,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <strong>Task Deadline:</strong> <span id="taskDeadline">Loading...</span>
               </div>
             </div>
-    
+
             <!-- Submissions Table -->
             <div class="table-responsive">
               <table class="table table-bordered table-hover">
@@ -598,7 +599,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody id="submissionTableBody"></tbody>
               </table>
             </div>
-    
+
             <!-- Template for submission rows -->
             <template id="viewTasks">
               <tr>
@@ -610,12 +611,13 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                   <span class="status-tag">Status</span>
                 </td>
                 <td class="actions">
-                  <button type="button" class="btn btn-success btn-md">
+                  <button type="button" class="btn btn-success btn-md approve-btn" data-assignment-id="">
                     <i class="bi bi-check-circle"></i>
                   </button>
                 </td>
               </tr>
             </template>
+
           </div>
         </div>
       </div>
@@ -809,6 +811,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 const clone = template.content.cloneNode(true);
 
                 // Populate the cloned row with submission data
+                clone.querySelector(".approve-btn").setAttribute("data-assignment-id", submission.assignment_id);
                 clone.querySelector(".student-name").textContent = submission.full_name || "N/A";
                 clone.querySelector(".submission-type").textContent = submission.submission_type || "N/A";
                 clone.querySelector(".completed-at").textContent = submission.completed_on || "N/A";
@@ -845,6 +848,31 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Show the modal
         $("#viewSubmissionsModal").modal("show");
+      });
+
+      // handle approval of submission
+      $(document).on("click", ".btn-success", function() {
+        const assignmentId = $(this).data("assignment-id");
+
+        if (!assignmentId) {
+          console.error("Assignment ID not found.");
+          return;
+        }
+
+        $.ajax({
+          url: "task-approve.php",
+          type: "POST",
+          data: {
+            assignment_id: assignmentId,
+            status: 1
+          },
+          success: function() {
+            alert("Submission approved!");
+          }.bind(this),
+          error: function() {
+            alert("Failed to approve the submission.");
+          }
+        });
       });
     </script>
 
