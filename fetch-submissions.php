@@ -4,10 +4,11 @@ require 'db_conn.php';
 if (isset($_GET['task_id'])) {
     $task_id = intval($_GET['task_id']);
 
+    // Prepare the SQL query to fetch submissions
     $stmt = $conn->prepare("
         SELECT 
             CONCAT(u.first_name, ' ', u.last_name) AS full_name,
-            ta.completed_on AS completed_at,
+            ta.completed_on AS completed_on,
             ta.submission_type AS submission_type,
             ta.submission_status AS submission_status,
             ta.submitted_file
@@ -21,14 +22,25 @@ if (isset($_GET['task_id'])) {
         $stmt->execute();
         $submissions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        echo json_encode([
-            'success' => true,
-            'submissions' => $submissions,
-        ]);
+        // Check if submissions exist
+        if (!empty($submissions)) {
+            echo json_encode([
+                'success' => true,
+                'submissions' => $submissions,
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'No submissions found for this task.',
+            ]);
+        }
     } catch (Exception $e) {
+        // Log the error for debugging purposes
+        error_log("Error fetching submissions: " . $e->getMessage());
+
         echo json_encode([
             'success' => false,
-            'message' => 'Error fetching submissions.',
+            'message' => 'An error occurred while fetching submissions.',
         ]);
     }
 } else {

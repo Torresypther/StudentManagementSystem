@@ -113,16 +113,11 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
 
     .dashboard-title {
       font-size: 28px;
-      /* Slightly larger font size for emphasis */
       font-weight: 700;
-      /* Bold font weight */
       color: #3d43aa;
-      /* Match the color with other elements */
       margin: 0;
       text-transform: uppercase;
-      /* Optional: Make the text uppercase for a professional look */
       letter-spacing: 1px;
-      /* Optional: Add slight spacing between letters */
     }
 
     .dashboard-header h1 {
@@ -302,6 +297,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       padding: 8px 15px;
       border-radius: 20px;
       font-size: 13.5px;
+      color: #3d43aa;
       font-weight: 600;
       text-align: center;
       color: #fff;
@@ -318,6 +314,15 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     .status-tag.overdue {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    .status-tag.submitted {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-tag.unknown {
       background-color: #fee2e2;
       color: #b91c1c;
     }
@@ -556,7 +561,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- View Submissions Modal -->
-    <div class="modal fade" id="viewSubmissionsModal" tabindex="-1" aria-labelledby="viewSubmissionsModalLabel" aria-hidden="true">
+       <div class="modal fade" id="viewSubmissionsModal" tabindex="-1" aria-labelledby="viewSubmissionsModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <!-- Modal Header -->
@@ -566,7 +571,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-
+    
           <!-- Modal Body -->
           <div class="modal-body">
             <!-- Task Deadline Section -->
@@ -576,7 +581,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <strong>Task Deadline:</strong> <span id="taskDeadline">Loading...</span>
               </div>
             </div>
-
+    
             <!-- Submissions Table -->
             <div class="table-responsive">
               <table class="table table-bordered table-hover">
@@ -593,7 +598,8 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody id="submissionTableBody"></tbody>
               </table>
             </div>
-
+    
+            <!-- Template for submission rows -->
             <template id="viewTasks">
               <tr>
                 <td class="student-name">Student Name</td>
@@ -604,7 +610,10 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                   <span class="status-tag">Status</span>
                 </td>
                 <td class="actions">
-                  <button type="button" class="btn btn-success btn-md"><i class="bi bi-check-circle"></i></button>
+                  <button type="button" class="btn btn-success btn-md">
+                    <i class="bi bi-check-circle"></i>
+                  </button>
+                </td>
               </tr>
             </template>
           </div>
@@ -781,37 +790,56 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
         $("#taskDeadline").text(taskDeadline);
 
         // Clear the table body before fetching new data
-        const submissionTableBody = $("#submissionTableBody");
-        submissionTableBody.empty();
+        const submissionTableBody = document.getElementById("submissionTableBody");
+        submissionTableBody.innerHTML = ""; // Clear existing rows
 
         // Fetch submissions for the selected task
         $.ajax({
           url: "fetch-submissions.php",
           type: "GET",
           data: {
-            task_id: taskId
+            task_id: taskId,
           },
           dataType: "json",
-
           success: function(response) {
+            if (response.submissions && response.submissions.length > 0) {
+              const template = document.getElementById("viewTasks");
 
-            tableBody.innerHtml = "";
+              response.submissions.forEach((submission) => {
+                const clone = template.content.cloneNode(true);
 
-            response.forEach(submission => {
-              const template = document.querySelector("#viewTasks");
-              const clone = submissionTableBody.content.cloneNode(true);
+                // Populate the cloned row with submission data
+                clone.querySelector(".student-name").textContent = submission.full_name || "N/A";
+                clone.querySelector(".submission-type").textContent = submission.submission_type || "N/A";
+                clone.querySelector(".completed-at").textContent = submission.completed_on || "N/A";
+                clone.querySelector(".submitted-file").innerHTML = submission.submitted_file ?
+                  `<a href="${submission.submitted_file}" target="_blank">View</a>` :
+                  "N/A";
+                clone.querySelector(".submission-status .status-tag").textContent =
+                  submission.submission_status || "missing";
+                clone.querySelector(".submission-status .status-tag").classList.add(
+                  submission.submission_status ? submission.submission_status.toLowerCase() : "unknown"
+                );
 
-              clone.querySelector(".student-name").textContent = submission.student_name;
-              clone.querySelector(".submission-type").textContent = submission.submission_type;
-              clone.querySelector(".completed-at").textContent = submission.completed_at;
-              clone.querySelector(".submitted-file").textContent = submission.submitted_file || "N/A";
-              clone.querySelector(".submission-status .status-tag").textContent = submission.status;
-              clone.querySelector(".submission-status .status-tag").classList.add(submission.status.toLowerCase());
-              submissionTableBody.appendChild(clone);
-            });
+                // Append the cloned row to the table body
+                submissionTableBody.appendChild(clone);
+              });
+            } else {
+              // If no submissions are found, display a message
+              submissionTableBody.innerHTML = `
+                <tr>
+                  <td colspan="6" class="text-center">No submissions found.</td>
+                </tr>
+              `;
+            }
           },
           error: function(xhr, status, error) {
             console.error("Error fetching task data:", error);
+            submissionTableBody.innerHTML = `
+              <tr>
+                <td colspan="6" class="text-center">An error occurred while fetching submissions.</td>
+              </tr>
+            `;
           },
         });
 
@@ -822,35 +850,37 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Populate Edit Task Modal -->
     <script>
-           $(document).on("click", ".btn-warning", function () {
+      $(document).on("click", ".btn-warning", function() {
         const taskRow = $(this).closest("tr");
         const taskId = taskRow.data("id");
         const taskName = taskRow.find(".tname").text();
         const taskDescription = taskRow.find(".tdesc").text();
         const taskDeadline = taskRow.find(".duedate").text();
-      
+
         // Populate the modal fields
         $("#editTaskId").val(taskId);
         $("#editTaskName").val(taskName);
         $("#editTaskDescription").val(taskDescription);
-      
+
         // Format the deadline for the datetime-local input
         const formattedDeadline = new Date(taskDeadline).toISOString().slice(0, 16);
         $("#editTaskDeadline").val(formattedDeadline);
-      
+
         // Fetch all students and mark assigned ones
         $.ajax({
           url: "fetch-assigned-students.php",
           type: "GET",
-          data: { task_id: taskId },
+          data: {
+            task_id: taskId
+          },
           dataType: "json",
-          success: function (students) {
+          success: function(students) {
             console.log("Students with assignment status:", students);
-      
+
             // Clear the container
             const container = $("#editAssignedStudentsContainer");
             container.empty();
-      
+
             // Add "Select All" badge
             container.append(`
               <div class="badge bg-secondary text-white me-2 mb-2 selectable-badge select-all"
@@ -858,7 +888,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 Select All
               </div>
             `);
-      
+
             // Add student badges
             students.forEach((student) => {
               const isSelected = student.is_assigned ? "selected-badge" : "";
@@ -870,40 +900,40 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
               `);
             });
-      
+
             // Reinitialize badge selection handlers
             initializeBadgeSelection();
           },
-          error: function (xhr, status, error) {
+          error: function(xhr, status, error) {
             console.error("Error fetching students:", error);
           },
         });
-      
+
         // Show the modal
         $("#editTaskModal").modal("show");
       });
-      
-            function initializeBadgeSelection() {
+
+      function initializeBadgeSelection() {
         const badges = document.querySelectorAll(".selectable-badge:not(.select-all)");
         const selectAllBadge = document.querySelector(".select-all");
         const hiddenInput = document.getElementById("editAssignedStudentsInput");
         const selectedIds = new Set();
-      
+
         // Prepopulate the selectedIds set with already selected badges
         badges.forEach((badge) => {
           if (badge.classList.contains("selected-badge")) {
             selectedIds.add(badge.getAttribute("data-id"));
           }
         });
-      
+
         // Function to update the hidden input
         function updateHiddenInput() {
           hiddenInput.value = Array.from(selectedIds).join(",");
         }
-      
+
         // Handle individual badge selection
         badges.forEach((badge) => {
-          badge.addEventListener("click", function () {
+          badge.addEventListener("click", function() {
             const userId = this.getAttribute("data-id");
             if (selectedIds.has(userId)) {
               selectedIds.delete(userId);
@@ -915,9 +945,9 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
             updateHiddenInput();
           });
         });
-      
+
         // Handle "Select All" functionality
-        selectAllBadge.addEventListener("click", function () {
+        selectAllBadge.addEventListener("click", function() {
           if (selectedIds.size === badges.length) {
             // Deselect all
             selectedIds.clear();
@@ -932,7 +962,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
           }
           updateHiddenInput();
         });
-      
+
         // Update the hidden input initially
         updateHiddenInput();
       }
