@@ -33,6 +33,22 @@
         position: relative;
       }
 
+      .back-button {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 2rem;
+        color: #007bff;
+        text-decoration: none;
+        z-index: 1000;
+        transition: transform 0.2s ease;
+      }
+
+      .back-button:hover {
+        transform: scale(1.1);
+        color: #0056b3;
+      }
+
       .background-decor {
         position: absolute;
         top: 0;
@@ -208,10 +224,12 @@
         }
       }
     </style>
-
-
   </head>
   <body>
+    <a href="index.php" class="back-button">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+
     <div class="background-decor">
       <div class="circle circle-1"></div>
       <div class="circle circle-2"></div>

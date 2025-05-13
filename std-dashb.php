@@ -208,23 +208,46 @@ $user_id = $_SESSION['user_id'];
             background-color: #dc2626;
         }
 
-        .status {
-            font-weight: 500;
-            padding: 2px 8px;
-            border-radius: 15px;
+        .status-tag {
             display: inline-block;
+            width: 100px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13.5px;
+            color: #3d43aa;
+            font-weight: 600;
             text-align: center;
-            margin: 0 auto;
+            color: #fff;
         }
 
-        .status.verified {
+        .status-tag.pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-tag.completed {
             background-color: #d1fae5;
             color: #065f46;
         }
 
-        .status.unverified {
+        .status-tag.approved {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-tag.unapproved {
             background-color: #fee2e2;
             color: #b91c1c;
+        }
+
+        .status-tag.missing {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .status-tag.submitted {
+            background-color: #d1fae5;
+            color: #065f46;
         }
 
         .user-profile {
@@ -474,7 +497,7 @@ $user_id = $_SESSION['user_id'];
                     <td class="task-name">Task Name</td>
                     <td class="task-desc">Description</td>
                     <td class="task-deadline">Deadline</td>
-                    <td class="task-status">Status</td>
+                    <td class="task-status"><span class="status-tag"></span></td>
                     <td>
                         <button type="button" class="btn btn-info btn-md attach-file-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             <i class="bi bi-paperclip"></i>
@@ -504,10 +527,40 @@ $user_id = $_SESSION['user_id'];
                     <td class="task-name">Task Name</td>
                     <td class="task-desc">Description</td>
                     <td class="task-deadline">Deadline</td>
-                    <td class="task-status">Status</td>
+                    <td class="task-status"><span class="status-tag"></span></td>
                     <td>
-                        <button class="btn btn-warning btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#viewTaskModal">
-                            <i class="bi bi-eye"></i> View
+                        <button class="btn btn-warning btn-md edit-btn" data-bs-toggle="modal" data-bs-target="#viewTaskModal">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            </template>
+            <!-- Approved Tasks Table -->
+            <div class="col-12">
+                <h3>Approved Tasks</h3>
+                <table class="table table-striped w-100">
+                    <thead>
+                        <tr>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Deadline</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="approvedTasksBody"></tbody>
+                </table>
+            </div>
+            <!-- Approved Task Template -->
+            <template id="approvedTaskTemplate">
+                <tr data-id="">
+                    <td class="task-name">Task Name</td>
+                    <td class="task-desc">Description</td>
+                    <td class="task-deadline">Deadline</td>
+                    <td class="task-status"><span class="status-tag"></span></td>
+                    <td>
+                        <button class="btn btn-warning btn-md edit-btn" data-bs-toggle="modal" data-bs-target="#viewTaskModal">
+                            <i class="bi bi-eye"></i>
                         </button>
                     </td>
                 </tr>
@@ -777,6 +830,7 @@ $user_id = $_SESSION['user_id'];
                     const completedTasksBody = document.getElementById("completedTasksBody");
                     pendingTasksBody.innerHTML = "";
                     completedTasksBody.innerHTML = "";
+                    approvedTasksBody.innerHTML = "";
 
                     const pendingTaskTemplate = document.getElementById("pendingTaskTemplate");
                     const completedTaskTemplate = document.getElementById("completedTaskTemplate");
@@ -793,6 +847,8 @@ $user_id = $_SESSION['user_id'];
                             taskRow = pendingTaskTemplate.content.cloneNode(true);
                         } else if (task.task_status === "completed") {
                             taskRow = completedTaskTemplate.content.cloneNode(true);
+                        } else if (task.task_status === "approved") {
+                            taskRow = approvedTaskTemplate.content.cloneNode(true);
                         } else {
                             return;
                         }
@@ -809,6 +865,8 @@ $user_id = $_SESSION['user_id'];
                             pendingTasksBody.appendChild(taskRow);
                         } else if (task.task_status === "completed") {
                             completedTasksBody.appendChild(taskRow);
+                        } else if (task.task_status === "approved") {
+                            approvedTasksBody.appendChild(taskRow);
                         }
                     });
                 })

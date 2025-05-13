@@ -8,7 +8,7 @@ $(document).ready(function () {
     handleUserRegistration();
   }
 
-  if (currentPage === "dashboard.php") {
+  if (currentPage === "index.php") {
     fetchStudentData();
   }
 

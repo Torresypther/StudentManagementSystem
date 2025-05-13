@@ -401,7 +401,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
   <div class="sidebar">
     <h2>Dashboard</h2>
-    <a href="dashboard.php"><i class="bi bi-house-door"></i> Home</a>
+    <a href="index.php"><i class="bi bi-house-door"></i> Home</a>
     <a href="task-maker.php"><i class="bi bi-book"></i> Tasks</a>
     <a href="churn_prediction.html"><i class="bi bi-book"></i> Churn Prediction</a>
 
