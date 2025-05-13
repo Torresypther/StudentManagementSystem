@@ -47,7 +47,7 @@ function loginUser() {
         console.log(response);
 
         if (response.res === "success") {
-          window.location.href = "dashboard.php";
+          window.location.href = "index.php";
         } else {
           alert("Login failed: " + response.msg);
         }
