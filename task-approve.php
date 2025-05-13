@@ -1,15 +1,11 @@
 <?php
 require 'db_conn.php';
-
 header('Content-Type: application/json');
 
 if (isset($_POST['assignment_id']) && isset($_POST['status'])) {
     $assignment_id = intval($_POST['assignment_id']);
     $status = $_POST['status'];
-    echo json_encode([
-        'assignment_id' => $assignment_id,
-        'status' => $status
-    ]);
+
     $task_status_value = ($status == 1) ? 'approved' : 'pending';
 
     try {
@@ -26,7 +22,7 @@ if (isset($_POST['assignment_id']) && isset($_POST['status'])) {
         } else {
             echo json_encode([
                 'success' => false,
-                'message' => 'Failed to update task status.'
+                'message' => 'Update failed. No rows affected.'
             ]);
         }
     } catch (PDOException $e) {

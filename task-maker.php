@@ -313,7 +313,22 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       color: #065f46;
     }
 
+    .status-tag.approved {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-tag.unapproved {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+
     .status-tag.overdue {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .status-tag.missing {
       background-color: #fee2e2;
       color: #b91c1c;
     }
@@ -373,6 +388,12 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       background-color: #e0f7fa !important;
       color: #006064 !important;
       border: 1px solid #b2ebf2;
+    }
+
+    .approve-btn.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: not-allowed;
     }
   </style>
 </head>
@@ -593,6 +614,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th scope="col">Completed At</th>
                     <th scope="col">Submitted File/Link</th>
                     <th scope="col">Submission Status</th>
+                    <th scope="col">Task Status</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
@@ -608,6 +630,9 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td class="completed-at">Completed At</td>
                 <td class="submitted-file">Submitted File/Link</td>
                 <td class="submission-status">
+                  <span class="status-tag">Status</span>
+                </td>
+                <td class="task-status">
                   <span class="status-tag">Status</span>
                 </td>
                 <td class="actions">
@@ -740,10 +765,10 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
             const userId = this.getAttribute('data-id');
             if (selectedIds.has(userId)) {
               selectedIds.delete(userId);
-              this.classList.remove('selected-badge'); // Remove selection highlight
+              this.classList.remove('selected-badge');
             } else {
               selectedIds.add(userId);
-              this.classList.add('selected-badge'); // Add selection highlight
+              this.classList.add('selected-badge');
             }
             updateHiddenInput();
           });
@@ -810,18 +835,35 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
               response.submissions.forEach((submission) => {
                 const clone = template.content.cloneNode(true);
 
+                const approveBtn = clone.querySelector(".approve-btn");
+
+                // Set assignment ID
+                approveBtn.setAttribute("data-assignment-id", submission.assignment_id);
+
+                // Disable the approve button if there's no submitted file
+                if (!submission.submitted_file) {
+                  approveBtn.disabled = true;
+                  approveBtn.classList.add("disabled");
+                  approveBtn.setAttribute("title", "No submission uploaded");
+                }
+
                 // Populate the cloned row with submission data
                 clone.querySelector(".approve-btn").setAttribute("data-assignment-id", submission.assignment_id);
-                clone.querySelector(".student-name").textContent = submission.full_name || "N/A";
-                clone.querySelector(".submission-type").textContent = submission.submission_type || "N/A";
-                clone.querySelector(".completed-at").textContent = submission.completed_on || "N/A";
+                clone.querySelector(".student-name").textContent = submission.full_name || "Data Unavailable";
+                clone.querySelector(".submission-type").textContent = submission.submission_type || "No Submission";
+                clone.querySelector(".completed-at").textContent = submission.completed_on || "Not Completed";
                 clone.querySelector(".submitted-file").innerHTML = submission.submitted_file ?
                   `<a href="${submission.submitted_file}" target="_blank">View</a>` :
-                  "N/A";
+                  "No Submission";
                 clone.querySelector(".submission-status .status-tag").textContent =
                   submission.submission_status || "missing";
                 clone.querySelector(".submission-status .status-tag").classList.add(
-                  submission.submission_status ? submission.submission_status.toLowerCase() : "unknown"
+                  submission.submission_status ? submission.submission_status.toLowerCase() : ""
+                );
+                clone.querySelector(".task-status .status-tag").textContent =
+                  submission.task_status || "unapproved";
+                clone.querySelector(".task-status .status-tag").classList.add(
+                  submission.task_status ? submission.task_status.toLowerCase() : ""
                 );
 
                 // Append the cloned row to the table body
@@ -864,14 +906,20 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
           type: "POST",
           data: {
             assignment_id: assignmentId,
-            status: 1
+            status: 1,
           },
-          success: function() {
-            alert("Submission approved!");
-          }.bind(this),
+          success: function(response) {
+            if (response.success) {
+              alert("Submission approved!");
+              $("#viewSubmissionsModal").modal("hide");
+              setTimeout(() => location.reload(true), 500);
+            } else {
+              alert("Failed to approve: " + response.message);
+            }
+          },
           error: function() {
-            alert("Failed to approve the submission.");
-          }
+            alert("Failed to approve the submission. Please try again.");
+          },
         });
       });
     </script>

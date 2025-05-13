@@ -12,6 +12,7 @@ if (isset($_GET['task_id'])) {
             ta.completed_on AS completed_on,
             ta.submission_type AS submission_type,
             ta.submission_status AS submission_status,
+            ta.task_status AS task_status,
             ta.submitted_file
         FROM task_assignments ta
         JOIN user_table u ON ta.student_id = u.user_id
