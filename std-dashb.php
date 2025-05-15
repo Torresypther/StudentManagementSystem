@@ -6,10 +6,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin'])) {
     exit();
 }
 
-if ($_SESSION['is_admin'] != 1) {
-    header("Location: std-dashb.php");
-    exit();
-}
+$user_id = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +45,8 @@ if ($_SESSION['is_admin'] != 1) {
             left: 0;
             height: 100%;
             width: 250px;
-            background: linear-gradient(to bottom right, #007358, rgb(1, 101, 77));
+            background: linear-gradient(to bottom right, #005f46, #014d38);
+            /* Updated */
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -74,13 +72,9 @@ if ($_SESSION['is_admin'] != 1) {
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .sidebar a i {
-            margin-right: 10px;
-            /* Adds space between the icon and the text */
-        }
-
         .sidebar a:hover {
-            background-color: rgb(21, 214, 160);
+            background-color: #02644a;
+            /* Darker green hover */
             color: #fff;
         }
 
@@ -97,7 +91,7 @@ if ($_SESSION['is_admin'] != 1) {
             justify-content: space-between;
             align-items: center;
             background-color: #fff;
-            color: #007358;
+            color: #005f46;;
             padding: 20px 30px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -127,7 +121,7 @@ if ($_SESSION['is_admin'] != 1) {
             margin-bottom: 20px;
             font-size: 20px;
             font-weight: 700;
-            color: #007358;
+            color: #005f46;
         }
 
         .table {
@@ -137,7 +131,7 @@ if ($_SESSION['is_admin'] != 1) {
 
         .table th {
             color: #c8ffe9;
-            background-color: #007358;
+            background-color: #005f46;
             font-weight: 600;
             text-align: center;
             padding: 12px;
@@ -152,7 +146,7 @@ if ($_SESSION['is_admin'] != 1) {
         }
 
         .table td {
-            color: #007358;
+            color: #005f46;
             text-align: center;
             vertical-align: middle;
             padding: 12px;
@@ -228,14 +222,11 @@ if ($_SESSION['is_admin'] != 1) {
             color: #92400e;
         }
 
-        .status-tag.completed {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-tag.approved {
-            background-color: #d1fae5;
-            color: #065f46;
+        .status-tag.completed,
+        .status-tag.approved,
+        .status-tag.submitted {
+            background-color: #c6f5e2;
+            color: #02644a;
         }
 
         .status-tag.unapproved {
@@ -246,11 +237,6 @@ if ($_SESSION['is_admin'] != 1) {
         .status-tag.missing {
             background-color: #fee2e2;
             color: #b91c1c;
-        }
-
-        .status-tag.submitted {
-            background-color: #d1fae5;
-            color: #065f46;
         }
 
         .user-profile {
@@ -296,11 +282,8 @@ if ($_SESSION['is_admin'] != 1) {
         /* Modal Header */
         .modal-header {
             background-color: #007358;
-            /* Primary green color */
             color: #ffffff;
-            /* White text for contrast */
             border-bottom: none;
-            /* Remove default border */
         }
 
         .modal-header .btn-close {
@@ -323,28 +306,24 @@ if ($_SESSION['is_admin'] != 1) {
 
         .modal-body {
             background-color: rgb(251, 255, 254);
-            /* Light green background */
-            color: #007358;
-            /* Primary text color */
+            color: #005f46;
             padding: 20px;
             border-radius: 8px;
         }
 
         .modal-footer {
             background-color: rgb(251, 255, 254);
-            /* Light green background */
             border-top: none;
-            /* Remove default border */
         }
 
         .modal-footer .btn-primary {
-            background-color: #007358;
+            background-color: #005f46;
             border: none;
             color: #ffffff;
         }
 
         .modal-footer .btn-primary:hover {
-            background-color: rgb(1, 101, 77);
+            background-color: #014d38;
         }
 
         .modal-footer .btn-secondary {
@@ -358,7 +337,7 @@ if ($_SESSION['is_admin'] != 1) {
         }
 
         .modal-body .form-control {
-            border: 1px solid #007358;
+            border: 1px solid #005f46;
             border-radius: 5px;
             padding: 10px;
             color: #007358;
@@ -371,7 +350,7 @@ if ($_SESSION['is_admin'] != 1) {
 
         .modal-body label {
             font-weight: 600;
-            color: #007358;
+            color: #005f46;
         }
 
         .modal-body .input-file label,
@@ -411,7 +390,7 @@ if ($_SESSION['is_admin'] != 1) {
 
         /* Specific Colors for Tags */
         .modal-body .tag.task-name {
-            background-color: #007358;
+            background-color: #005f46;
             /* Primary green */
         }
 

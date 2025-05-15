@@ -1,14 +1,14 @@
 <?php
 
-// $server_name = "sql108.infinityfree.com";
-// $username = "if0_38977934";
-// $password = "bxso7kyevffTm";
-// $db_name = "if0_38977934_task_tracker_db"; 
+$server_name = "sql108.infinityfree.com";
+$username = "if0_38977934";
+$password = "bxso7kyevffTm";
+$db_name = "if0_38977934_task_tracker_db"; 
 
-$server_name = "localhost";
-$username = "root";
-$password = "";
-$db_name = "user_db";
+// $server_name = "localhost";
+// $username = "root";
+// $password = "";
+// $db_name = "user_db";
 
 try {
     $conn = new PDO("mysql:host=$server_name;dbname=$db_name", $username, $password);

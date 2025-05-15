@@ -616,7 +616,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
                     Select All
                   </div>
                   <?php
-                  $colors = ['bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-info']; // Array of Bootstrap colors
+                  $colors = ['bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-info'];
                   if (count($users) > count($colors)) {
                     for ($i = count($colors); $i < count($users); $i++) {
                       $colors[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
@@ -905,17 +905,33 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
               </div>
             `);
 
-            // Add student badges
+            const colorClasses = [
+              "bg-primary",
+              "bg-success",
+              "bg-danger",
+              "bg-info",
+              "bg-warning",
+            ];
+
+            let lastColor = null;
+
             students.forEach((student) => {
               const isSelected = student.is_assigned ? "selected-badge" : "";
+              const availableColors = colorClasses.filter(color => color !== lastColor);
+              const randomColor = availableColors[Math.floor(Math.random() * availableColors.length)];
+
+              lastColor = randomColor;
+
               container.append(`
-                <div class="badge bg-primary text-white me-2 mb-2 selectable-badge ${isSelected}"
+                <div class="badge text-white me-2 mb-2 selectable-badge ${randomColor} ${isSelected}"
                   data-id="${student.user_id}"
                   style="display: inline-block; padding: 10px 15px; border-radius: 20px; cursor: pointer;">
                   ${student.full_name}
                 </div>
               `);
             });
+
+
 
             // Reinitialize badge selection handlers
             initializeBadgeSelection();
