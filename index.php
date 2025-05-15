@@ -1,14 +1,12 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin'])) {
   header("Location: user_login.php");
   exit();
 }
 
-$user_id = $_SESSION['user_id'];
-
-if ($user_id != 9) {
+if ($_SESSION['is_admin'] != 1) {
   header("Location: std-dashb.php");
   exit();
 }
@@ -375,7 +373,7 @@ if ($user_id != 9) {
           <div class="icon">
             <i class="bi bi-book-fill"></i>
           </div>
-          <h4>Active Sessions</h4>
+          <h4>Total Tasks</h4>
           <div class="value">10</div>
         </div>
       </div>

@@ -4,7 +4,7 @@ require 'db_conn.php';
 header('Content-Type: application/json');
 
 try {
-    $stmt = $conn->prepare("SELECT user_id, first_name, last_name, course, address, is_verified FROM user_table");
+    $stmt = $conn->prepare("SELECT user_id, first_name, last_name, course, address, is_verified FROM user_table WHERE is_admin = 0");
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

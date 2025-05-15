@@ -1,20 +1,19 @@
 <?php
+
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin'])) {
   header("Location: user_login.php");
   exit();
 }
 
-$user_id = $_SESSION['user_id'];
-
-if ($user_id != 9) {
+if ($_SESSION['is_admin'] != 1) {
   header("Location: std-dashb.php");
   exit();
 }
 
 require 'db_conn.php';
-$users_stmt = $conn->prepare("SELECT user_id, CONCAT(first_name, ' ', last_name) AS full_name FROM user_table");
+$users_stmt = $conn->prepare("SELECT user_id, CONCAT(first_name, ' ', last_name) AS full_name FROM user_table WHERE is_verified = 1 AND is_admin = 0");
 $users_stmt->execute();
 $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -55,7 +54,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       left: 0;
       height: 100%;
       width: 250px;
-      background: linear-gradient(to bottom right, #1a1e4c, #1e293b );
+      background: linear-gradient(to bottom right, #1a1e4c, #1e293b);
       color: #eef4ff;
       display: flex;
       flex-direction: column;
@@ -333,8 +332,8 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       cursor: not-allowed;
     }
 
-    .btn-primary{
-      background-color:rgb(36, 50, 73) !important;
+    .btn-primary {
+      background-color: rgb(36, 50, 73) !important;
     }
   </style>
 </head>
@@ -389,7 +388,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
               Select All
             </div>
             <?php
-            $colors = ['bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-info']; // Array of Bootstrap colors
+            $colors = ['bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-info'];
             if (count($users) > count($colors)) {
               for ($i = count($colors); $i < count($users); $i++) {
                 $colors[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));

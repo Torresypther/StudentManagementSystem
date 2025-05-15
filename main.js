@@ -25,7 +25,7 @@ $(document).ready(function () {
   handleProfileEditTrigger();
   enableProfileEditing();
   handleProfileFormSubmission();
-  handleLogout(); // Logout functionality can be global
+  handleLogout();
 });
 
 function loginUser() {
@@ -99,9 +99,8 @@ function fetchStudentData() {
 
       let template = document.querySelector("#productTemplate");
       let parent = document.querySelector("#tableBody");
-      parent.innerHTML = ""; // Clear existing rows
-
-      let verifiedCount = 0; // Initialize verified users count
+      parent.innerHTML = "";
+      let verifiedCount = 0;
 
       data.forEach((item) => {
         if (!item.user_id) {
