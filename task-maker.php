@@ -55,8 +55,8 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       left: 0;
       height: 100%;
       width: 250px;
-      background: linear-gradient(to bottom right, #484ebd, #3d43aa);
-      color: #fff;
+      background: linear-gradient(to bottom right, #1a1e4c, #1e293b );
+      color: #eef4ff;
       display: flex;
       flex-direction: column;
       padding: 20px;
@@ -114,7 +114,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
     .dashboard-title {
       font-size: 28px;
       font-weight: 700;
-      color: #3d43aa;
+      color: #333675;
       margin: 0;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -129,70 +129,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
     .dashboard-header .date-time {
       font-size: 16px;
       font-weight: 500;
-      color: #3d43aa;
-    }
-
-    .summary-boxes {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 30px;
-      flex-wrap: nowrap;
-      justify-content: space-between;
-
-    }
-
-    .summary-box {
-      flex-basis: 30%;
-      max-width: 300px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      text-align: center;
-      position: relative;
-      height: 120px;
-    }
-
-    .summary-box h4 {
-      font-size: 16px;
-      font-weight: 500;
-      color: #3d43aa;
-      margin-bottom: 10px;
-    }
-
-    .summary-box .value {
-      font-size: 28px;
-      font-weight: 700;
-      color: #3d43aa;
-    }
-
-    .summary-box .icon {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 24px;
-      color: rgb(92, 97, 201);
-    }
-
-    @media (max-width: 768px) {
-      .summary-boxes {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .summary-box {
-        flex-basis: 100%;
-        max-width: 100%;
-      }
-
-      .sidebar {
-        width: 200px;
-      }
-
-      .main-content {
-        margin-left: 200px;
-        width: calc(100% - 200px);
-      }
+      color: #333675;
     }
 
     .table-container {
@@ -206,7 +143,7 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       margin-bottom: 20px;
       font-size: 20px;
       font-weight: 700;
-      color: #3d43aa;
+      color: #333675;
     }
 
     .table {
@@ -394,6 +331,10 @@ $users = $users_stmt->fetchAll(PDO::FETCH_ASSOC);
       opacity: 0.5;
       pointer-events: none;
       cursor: not-allowed;
+    }
+
+    .btn-primary{
+      background-color:rgb(36, 50, 73) !important;
     }
   </style>
 </head>

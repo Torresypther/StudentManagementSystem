@@ -1,5 +1,10 @@
 <?php
 
+// $server_name = "sql108.infinityfree.com";
+// $username = "if0_38977934";
+// $password = "bxso7kyevffTm";
+// $db_name = "if0_38977934_task_tracker_db"; 
+
 $server_name = "localhost";
 $username = "root";
 $password = "";

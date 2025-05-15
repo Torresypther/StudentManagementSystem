@@ -49,8 +49,8 @@ if ($user_id != 9) {
       left: 0;
       height: 100%;
       width: 250px;
-      background: linear-gradient(to bottom right, #484ebd, #3d43aa);
-      color: #fff;
+      background: linear-gradient(to bottom right, #1a1e4c, #1e293b);
+      color: #eef4ff;
       display: flex;
       flex-direction: column;
       padding: 20px;
@@ -193,35 +193,35 @@ if ($user_id != 9) {
       color: #333675;
     }
 
+    .table-container .no-data {
+      text-align: center;
+      color: #6b7280;
+      font-size: 16px;
+      padding: 20px;
+    }
+
     .table {
       width: 100%;
       border-collapse: collapse;
-      border-spacing: 0;
       margin-bottom: 20px;
     }
 
-    .table th {
-      background-color: #3b3d92;
-      color: #ffffff;
-      font-weight: 600;
+    .table th,
+    .table td {
       text-align: center;
       padding: 12px;
+      vertical-align: middle;
+      border-bottom: 2px solid #e5e7eb;
     }
 
-    .table th:first-child {
-      border-top-left-radius: 8px;
-    }
-
-    .table th:last-child {
-      border-top-right-radius: 8px;
+    .table th {
+      background-color: #1a1e4c;
+      color: #ffffff;
+      font-weight: 600;
     }
 
     .table td {
       color: #333675;
-      text-align: center;
-      vertical-align: middle;
-      padding: 12px;
-      border-bottom: 2px solid #e5e7eb;
       background-color: inherit;
     }
 
@@ -233,23 +233,14 @@ if ($user_id != 9) {
       background-color: #e2e7f7;
     }
 
-    .table td:first-child,
     .table th:first-child {
-      border-left: none;
+      border-top-left-radius: 8px;
     }
 
-    .table td:last-child,
     .table th:last-child {
-      border-right: none;
-      text-align: center;
+      border-top-right-radius: 8px;
     }
 
-    .table-container .no-data {
-      text-align: center;
-      color: #6b7280;
-      font-size: 16px;
-      padding: 20px;
-    }
 
     .profile-img {
       border-radius: 50%;
@@ -277,10 +268,10 @@ if ($user_id != 9) {
     }
 
     .status {
-      width: 100px;
+      width: 80px;
       font-weight: 600;
-      padding: 2px 10px;
-      border-radius: 50px;
+      padding: 2px 5px;
+      border-radius: 30px;
       display: inline-block;
       text-align: center;
       font-size: 12.5px;
@@ -403,7 +394,7 @@ if ($user_id != 9) {
     <div class="row justify-content-center table-container">
       <div class="col-12">
         <h3>Verified Students</h3>
-        <table class="table table-striped w-100">
+        <table class="table w-100">
           <thead>
             <tr>
               <th scope="col">First Name</th>
@@ -414,20 +405,23 @@ if ($user_id != 9) {
             </tr>
           </thead>
           <tbody id="tableBody">
-            <template id="productTemplate">
-              <tr class="std-row">
-                <td class="id" style="display: none">ID</td>
-                <td class="fname">Fname</td>
-                <td class="lname">Lname</td>
-                <td class="course">Degree</td>
-                <td class="address">Address</td>
-                <td class="status">Status</td>
-              </tr>
-            </template>
+            <!-- Rows will be injected here -->
           </tbody>
         </table>
+
+        <!-- Move this template OUTSIDE the table to avoid breaking layout -->
+        <template id="productTemplate">
+          <tr>
+            <td class="fname"></td>
+            <td class="lname"></td>
+            <td class="course"></td>
+            <td class="address"></td>
+            <td class="status"></td>
+          </tr>
+        </template>
       </div>
     </div>
+
   </div>
 
   <!-- Edit Profile Modal -->
@@ -534,7 +528,7 @@ if ($user_id != 9) {
     setInterval(updateDateTime, 1000);
     updateDateTime();
   </script>
-  
+
   <script src="main.js"></script>
 </body>
 

@@ -87,7 +87,7 @@ function fetchLoggedInUserData() {
 
 function fetchStudentData() {
   $.ajax({
-    url: "user_data.php", // Backend endpoint to fetch student data
+    url: "user_data.php",
     type: "GET",
     dataType: "json",
   })
@@ -350,14 +350,15 @@ function fetchTaskData() {
         console.log("Task ID from backend:", item.task_id);
       
         // Populate other fields
-        clone.querySelector(".tname").textContent = item.task_name || "N/A";
-        clone.querySelector(".tdesc").textContent = item.task_desc || "N/A";
-        clone.querySelector(".duedate").textContent = item.task_deadline || "N/A";
+        clone.querySelector(".tname").textContent = item.task_name || "No Data";
+        clone.querySelector(".tdesc").textContent = item.task_desc || "No Data";
+        clone.querySelector(".duedate").textContent = item.task_deadline || "No Data";
       
         const statusElement = clone.querySelector(".status-tag");
-        statusElement.textContent = item.task_status || "N/A";
+        statusElement.textContent = item.task_status || "No Data";
       
         // Add status-specific classes
+
         if (item.task_status === "pending") {
           statusElement.classList.add("pending");
         } else if (item.task_status === "completed") {
